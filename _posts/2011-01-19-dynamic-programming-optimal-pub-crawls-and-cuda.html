@@ -1,0 +1,78 @@
+---
+layout: post
+title: Dynamic Programming, Optimal Pub Crawls and CUDA
+tags: []
+status: draft
+type: post
+published: false
+meta:
+  _syntaxhighlighter_encoded: '1'
+---
+<p class="pm_first">The Traveling Salesman Problem is the canonical example of the computationally 'hard' problem, with a search of the journal <a title="Traveling Salesman articles from the journal, 'Mathematical Programming'" href="http://www.springerlink.com/content/103081/?k=traveling+salesman" target="_blank">Mathematical Programming</a> alone bringing up over 100 results since 1970. Belonging to a class of problems known as NP ( formally, solvable in 'Non-deterministic polynomial time', informally just bloody hard ), it can be simply stated yet is deceptively difficult to tackle. So difficult, in fact, that exact solutions to the problem are computationally infeasible for even relatively small examples. Most recent research gives up on finding exact solutions, instead focussing on using metaheuristics to find good, though not necessarily exact, solutions to the problem.  The focus of this article, however, is on a method for finding an exact solution to small problems first published in the 1950s by Richard Bellman. It is known as Dynamic Programming.</p>
+<!--more-->
+<h3>The Traveling Salesman Problem</h3>
+The problem itself is simple to explain. A traveling salesman has to visit a number of cities, what is the shortest route between them that visits each city exactly once, and returning to the origin? Simple to explain, deceptively complex to solve for all but the most trivial cases. For a thorough exposition of the TSP and its history, see <a title="The Traveling Salesman Problem from Georgia Tech" href="http://www.tsp.gatech.edu/" target="_blank">this site from Georgia Tech</a>.
+<h3>Dynamic Programming</h3>
+<a title="Richard Bellman's Wikipedia entry" href="http://en.wikipedia.org/wiki/Richard_Bellman" target="_blank">Richard Bellman</a> invented Dynamic Programming in 1953 as a method of solving scheduling problems by identifying the presence of ‘overlapping subproblems'. As an example, consider a function for generating the nth fibonacci number. The fibonacci sequence is defined as follows,
+
+$$!{F_n}_{n=1}^infty,F_1=1,F_2=1, F_n=F_n-1+F_n-2 $$
+
+So the first few numbers are 1,1,2,3,5,8 etc. Interpreting the mathematical definition directly leads to a recursive implementation, something like
+
+[cpp]
+int fibonacci( int n ) {
+    switch(n) {
+        case 0:
+        case 1:
+            return 1;
+        default:
+            return fibonacci(n-1)+fibonacci(n-2);
+    }
+}
+[/cpp]
+
+
+[singlepic id=116 w=120 float=left] The problem with this simple definition is illustrated by its dependency graph.  For example, both F(5) and F(4) require the computation of F(3), and so on, resulting in many redundant computations. These ‘overlapping subproblems’ can be easily identified and stored in advance, a technique now widely known as memoization.
+
+[cpp]
+int fibonacci( int n ) {
+    switch(n) {
+        case 0:
+        case 1:
+            return 1;
+        default:
+            if (fibtable[n])
+                return fibtable[n];
+            return fibonacci(n-1) + fibonacci(n-2);
+    }
+}
+[/cpp]
+
+
+It should be noted that if we were really interested in calculating Fibonacci numbers, there are more efficient methods – however it suffices to show the obvious benefits of Dynamic Programming versus naiive recursion.
+
+The most obvious way to solve the TSP is by brute force enumeration of every possible route, however this has complexity O(n!), meaning that if you were to start calculating an optimal pub crawl between 20 pubs at a rate of one route per second at the moment of the big bang, you would still be going. By comparison, Bellman's method would take little over an hour, by taking advantage of the fact that, like the Fibonacci algorithm, many of the computations are redundant. The dynamic programming formulation can be specified as follows,
+
+$$!C(S,l) = begin{cases} min_{min S-l}{C(S-l,m) + a_{ml}} &amp; lvert S rvert &gt; 2\ a_{1,S-l}+a_{S-l,m} &amp; lvert S rvert == 2end{cases}$$
+
+As an illustration, take a simple TSP representing a pub crawl between 5 pubs, and number them 1-5. The expression above means that the shortest route can be calculated by the minimum of the routes between pubs 2-5, each route ending at a different pub, plus the distance to pub 1. This is illustrated in fig 1. The routes between pubs 2-5 in turn depend on their subroutes, continuing in a recursive fashion until we reach routes between only 2 pubs, which can be calculated explicitly.
+<h3>A Minimal Hash for TSP Subroutes</h3>
+The key to implementing the method is finding a way to store the calculated value of each sub problem so that it can be easily retrieved. For the Fibonacci algorithm this is trivial, as the function takes only a single integer as an index, however for Bellman's algorithm the index is an entire route. Though this could be done with a hashtable using strings as keys, for ease of use with CUDA it is preferred to find a 'minimal hash', in mathematical parlance a bijection between all subroutes of a length n and the set of positive integers $$mathbb{N}_n$$, so that simple array based storage can be used.
+
+This is achieved by a construction known as a "Combinadic", referred to in a Microsoft article by James McCaffrey, who in turn credits the concept to Buckles and Lybanon. Note that I have taken some shortcuts from the published method, in that I don't require the combinadic values to be in lexicographical order.
+
+If we represent a route as a tuple of an ordered set of integers $$s$$ and a zero-based index $$k$$ indicating the end node ( or pub ), the hashing function is as follows
+
+$$!H(s,k) = k + lvert s rvertsum_i binom{s_i}{i}$$
+
+Note that the function is a perfect hash only for all routes of the same length, that is the same value of $$lvert s rvert$$ - this is sufficient for the purpose. As an example, take the route defined by ({1,3,4,5},2), the route between pubs 1,3,4 and 5 ending at pub 4. Then we have
+
+$$!H({1,3,4,5},2) = 2 + 4 left(binom{1}{0}+binom{3}{1}+binom{4}{2}+binom{5}{3}right)=$$
+
+So we calculate the length of that route and store it in array location x. We can determine the array locations of the dependent routes using the same hashing function as follows : Route ({1,3,4,5},2) depends on routes ({1,3,5},0),  ({1,3,5},1) and ({1,3,5},2) which according to the hashing function have indices a, b and c resepctively. In addition to the length of the optimal route, we also want the route itself, so an extra array is kept to store the node that was used in calculating the minimum, as this will form part of the optimal route ( in the example above, we will store either node 1, 3 or 5 ). At any point in the algorithm there are a total of 4 arrays, 2 to store the results of the current calculation, and 2 to retrieve the results of the previous one.
+<h3>References</h3>
+<ol>
+	<li><span class="p1"><a name="bellman"></a>Bellman, R. 1962. <a title="Dynamic Programming Treatment of the Travelling Salesman Problem" href="http://doi.acm.org/10.1145/321105.321111" target="_blank">Dynamic Programming Treatment of the Travelling Salesman Problem</a>. <em>Journal of the ACM</em>, 9(1), pp.61-63. </span></li>
+	<li><span class="p1"><a name="held"></a>Held, M. and Karp, R.M. 1962. <a title="A Dynamic Programming Approach to Sequencing Problems" href="http://link.aip.org/link/?SMJMAP/10/196/1" target="_blank">A Dynamic Programming Approach to Sequencing Problems</a>. <em>J. Soc. Indust. and Appl. Math.</em>10(1), pp.196-210.</span></li>
+	<li>http://msdn.microsoft.com/en-us/library/aa289166%28VS.71%29.aspx</li>
+</ol>

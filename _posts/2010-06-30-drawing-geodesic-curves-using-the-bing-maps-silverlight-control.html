@@ -1,0 +1,70 @@
+---
+layout: post
+title: Drawing geodesic curves using the Bing maps Silverlight control
+tags:
+- bing maps
+- C#
+- Mathematics
+- Silverlight
+- Software
+status: publish
+type: post
+published: true
+meta:
+  _syntaxhighlighter_encoded: '1'
+  dsq_thread_id: '268619540'
+  _edit_last: '2'
+---
+<p class="pm_first">For an upcoming post I wanted to be able to plot the shortest routes between various positions on the Earth using the <a title="Bing Maps Silverlight Control" href="http://msdn.microsoft.com/en-us/library/ee681884.aspx" target="_blank">Bing Maps Silverlight control</a>. Although since I started working on the problem Bing have provided a similar feature with their <a title="New Bing Map Apps: Gas Prices, Distance Calculator and Parking Finder" href="http://www.bing.com/community/blogs/maps/archive/2010/05/19/new-bing-map-apps-gas-prices-distance-calculator-and-parking-finder.aspx" target="_blank">Distance Calculator App</a>, the functions are not available for reuse via the public API. Interested developers may just want to skip the maths and just download the code.</p>
+<a title="Source code in zip file for Silverlight 4.0" href="http://www.planetmarshall.co.uk/code/geodesic.zip">Geodesic source code for Silverlight 4.0</a>
+<h2>Geodesics</h2>
+[singlepic id=118 float=right w=150]
+
+The shortest path between two points on an arbitrary surface is called a <a title="Geodesic from MathWorld" href="http://mathworld.wolfram.com/Geodesic.html" target="_blank">Geodesic</a>, and on a sphere, it is a <a title="Great Circle from MathWorld" href="http://mathworld.wolfram.com/GreatCircle.html" target="_blank">Great Circle</a>. Modelling the surface of the earth as a perfect sphere, the shortest distance between any two locations on the surface is then described by a section of a Great Circle, ie an arc that lies on the plane that is described by the vectors between its start and end points and the Earth's centre ( see figure 1 ).
+
+With this information, one way ( and the way I have adopted ) to plot such a curve is as follows:
+<ol>
+	<li>Generate the points of the curve in two dimensions using the parametric equation of a circle.</li>
+	<li>Transform the plane of the 2d curve into 3D space such that it intersects the end points on the sphere, and the sphere's centre.</li>
+	<li>Project the transformed points back into 2D space using the Mercator projection equations.</li>
+</ol>
+<!--more-->
+[silverlight: Geodesic.xap,520,384,false]
+<h2>A Parametric Representation of a Great Circle</h2>
+The <a title="Mercator Projection from MathWorld" href="http://mathworld.wolfram.com/MercatorProjection.html">Mercator projection</a> gives the 2D rectilinear coordinates (x,y) as a function of the latitude and longitude of a point on a sphere. However, it is easier to draw the point using a typical drawing API, if we have a representation that gives each point of the curve in terms of a single parameter. To derive such a function, we observe that the parametric equation for a circle is given by
+
+\[
+\begin{pmatrix} x \\ y \end{pmatrix} = \begin{pmatrix} r \cos t \\ r \sin t \end{pmatrix}
+\]
+
+Since a great circle is a rigid transformation of a circle in 3D space, it can also be represented as a function of a single parameter
+
+\[
+\begin{pmatrix} x \\ y \\ z \end{pmatrix} = \mathbf{R}\cdot\begin{pmatrix} r \cos t \\ r \sin t \end{pmatrix}
+\]
+
+where \(\mathbf{R}\) is a 2x3 matrix that transforms the plane circle to a location on a sphere. Using <a title="Spherical Coordinates from MathWorld" href="http://mathworld.wolfram.com/SphericalCoordinates.html">spherical coordinates</a>, the Mercator projection of the curve specified above is then
+\[
+\mathbf{C}(t) =\begin{pmatrix} \lambda \\ \tanh^{-1} \left(\sin \phi \right)\end{pmatrix} = \begin{pmatrix} \tan^{-1}\left(y/x\right)\\ \tanh^{-1}z \end{pmatrix}
+\]
+Where \(\lambda\) and \(\phi\) are the longitude and latitude of the point to be projected, respectively. Writing the equation out in full gives,
+
+\[
+\mathbf{C}(t) = \begin{pmatrix}
+\tan^{-1}\left(\frac{R_{2,1}\cos t + R_{2,2}\sin t}{R_{1,1}\cos t + R_{1,2}\sin t}\right)\\
+\tanh^{-1}(R_{3,1}\cos t +R_{3,2}\sin t)
+\end{pmatrix}
+\]
+
+Now that we have a suitable parametric equation, we can draw the geodesic with a series of connected line segments by varying the parameter, t.
+<blockquote>Mathematical note - the parameterization given by this expression is highly non-uniform, meaning that there are many more points generated in some parts of the curve than in others. The mathematics of generating uniform ( or natural ) parameterizations belongs to the field of differential curve geometry and is beyond the scope of this article ( and my brain ).</blockquote>
+<h2>Implementation notes</h2>
+[singlepic id=141 float=left w=150] Inevitably, the mathematics alone is not sufficient to produce an implementation of a reuseable class for the Bing Silverlight control. There are two main issues to resolve; firstly, it is not immediately obvious how to derive from the provided <a title="Documentation on MapShapeBase from MSDN" href="http://msdn.microsoft.com/en-us/library/microsoft.maps.mapcontrol.core.mapshapebase.aspx" target="_blank"><code>MapShapeBase</code></a> class to create new shape overlays and secondly, how to handle drawing the curves when they 'wrap' beyond the map's viewable area ( this is easier to illustrate than to describe - see the figure opposite ).
+<h4>Inheriting from <code>MapShapeBase</code></h4>
+I must confess that I cheated slightly in implementing the <code>MapGeodesicPath</code> class, in that I used <a title="Reflector from Red-Gate. Stop sending them hate mail!" href="http://www.red-gate.com/products/reflector/" target="_blank">Reflector</a> to peer into the implementation of the base class. The existing derivations of this class simply defer to <code>MapShapeBase</code> for most of the work, which they can do since for a <code>MapPolygon</code> and <code>MapPolyline</code> there is a one-to-one relationship between <code>Locations</code>, latitude and longitude points on the map and <code>Points</code>, the actual 2D cartesian coordinates used to draw the shape. For the Geodesic, this is not the case, because we only want to specify the start and ending points of the curve, not every point in between. A solution is to delegate the point generation code to a secondary class, one that can be independently tested.
+<h4>Splitting the curves at the map boundary</h4>
+When the curves wrap around the map projection, they need to be split at the boundary. This is done by finding the parameter t for the longitude value of the boundary. Where the longitude value is +/- 180, this is straightforward as the equation above reduces to,
+\[
+t = -\tan^{-1}\frac{R_{1,2}}{R_{2,2}}
+\]
+For other longitude values, we simply offset the longitude values by the required amount, and calculate the value of t for the new matrix.

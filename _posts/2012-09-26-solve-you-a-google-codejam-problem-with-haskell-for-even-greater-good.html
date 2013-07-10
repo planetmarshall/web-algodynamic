@@ -1,0 +1,54 @@
+---
+layout: post
+title: Solve You a Google CodeJam Problem with Haskell for Even Greater Good
+tags: []
+status: draft
+type: post
+published: false
+meta:
+  _edit_last: '2'
+  _syntaxhighlighter_encoded: '1'
+---
+In a previous post I looked at using Haskell to solve a problem from Google CodeJam
+<h2>Numbers</h2>
+On the face of it, this is the hardest of the three problems to solve ( at least according to the statistics ). It is stated as
+<blockquote>In this problem, you have to find the last three digits before the decimal point for the number \((3 + \sqrt5)^n\). For example, when n = 5, (3 + √5)5 = 3935.73982... The answer is 935.</blockquote>
+As before, there are two problem sets, a smaller set where n is restricted to the range n &lt; 30, and one where n &lt; 2000000000. Now although \((3 + \sqrt5)^{30}\) is just beyond the range of 64-bit machine precision arithmetic, there are a number of<a title="Arbitrary and Dynamic Precision Libraries for Haskell" href="http://www.haskell.org/haskellwiki/Libraries_and_tools/Mathematics#Real_and_rational_numbers" target="_blank"> libraries available for Haskell providing arbitrary precision arithmetic</a>, and the performance cost for this task is minor. I have chosen Dave Lester's ERA library, since it is a self contained Haskell module, and the corresponding Haskell program that solves the problem for an easy 15 points is reassuringly short.
+
+[code lang="haskell" gutter="1"]
+import Control.Monad
+import Text.Printf
+import CReal
+
+expr :: CReal -&gt; Integer
+expr n =  floor((3+sqrt 5)**n) `mod` 1000
+
+main = do
+	l 	let num_items = read l
+	items 	let printCase (index,value) = printf &quot;Case #%d: %03d\n&quot; index value
+	mapM_ printCase $ zip [1..num_items] [ expr (read x) | x [/code]
+
+That's basically it for the short problem, but since this is a practice test and we don't have the time constraints of the actual contest, it's instructive to go off on a bit of a tangent and ask how we would do this if we didn't have access to an arbitrary precision arithmetic library.
+<h3>The Karatsuba Multiplication Algorithm</h3>
+Until the 1960s the basic multiplication algorithm that we all learn by rote at school ( though we may not think of it as an algorithm, as a series of logical steps carried out to perform a task that's exactly what it is ), was thought to be optimal. It was <a title="Karatsuba Multiplication from Mathworld" href="http://mathworld.wolfram.com/KaratsubaMultiplication.html" target="_blank">Anatolii Alexeevitch Karatsuba</a> who showed that this was not the case, demonstrating  that the divide and conquer approach that is the foundation of so many efficient  algorithms ( such as <a title="Quicksort from Wikipedia" href="http://en.wikipedia.org/wiki/Quicksort" target="_blank">quicksort</a> and the <a title="The Cooley-Tukey FFT Algorithm from Wikipedia" href="http://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm" target="_blank">FFT</a> to name but two ) could be applied to multiply two numbers more efficiently.
+<h3>Modular Exponentiation</h3>
+However, evaluating such a formula for n = 2000000000 is quite a different matter. \((3 + \sqrt5)^{2\times 10^9}\) has some 700 million digits, the number of decimal digits for a number \(x^n\) is given by \(\lfloor \log_{10}x+1\rfloor\), way beyond what we can evaluate using a brute force method. This problem requires us to think a bit more intelligently.
+
+Note that we are only asked for the three digits before the decimal point. This is equivalent to asking for the value of
+\[
+\lfloor(3 + \sqrt5)^{n}\rfloor \mod 1000
+\]
+
+This is tantalisingly close to a well studied problem in cryptography; modular exponentiation. The only difference here ( and what stops us using a prepackaged method from GMP or similar ) is that we have to exponentiate a floating point number.
+
+It's the modulus function that makes this problem tractable, allowing us to reduce n to something much more manageable. We do this by first representing n in base-2, or binary, notation, something which is already done for free merely through virtue of using a digital computer.
+
+As an example, lets take n = 178934639. In binary notation, this is 1010101010100101001101101111, or
+\[
+\begin{align*}
+178934639_{10} &amp;= 1010101010100101001101101111_2 \\
+&amp;= \sum_{i=0}^{27} a_i 2^i
+\end{align*}
+\]
+
+How does this representation help us?

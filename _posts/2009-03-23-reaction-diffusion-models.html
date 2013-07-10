@@ -1,0 +1,51 @@
+---
+layout: post
+title: Reaction-Diffusion Models
+tags:
+- C#
+- Differential Equations
+- Mathematics
+- Silverlight
+- Software
+status: publish
+type: post
+published: true
+meta:
+  _edit_last: '2'
+  dsq_thread_id: '268619532'
+---
+[singlepic=68,96,right]<p class="pm_first"><span>O</span>ne of <a target="_new" href="http://en.wikipedia.org/wiki/Alan_Turing">Alan Turing</a>'s many contributions to mathematics and science during the 20th century was his <a href="#1_turing">1952 paper</a> on "The Chemical Basis of Morphogenesis" in which he suggested that a simple model of coupled differential equations could account for pattern formation in natural processes such as those found on animal coats. Such models are known as Reaction-Diffusion models, and take the following general form
+\[
+\frac{\partial}{\partial t}\mathbf{q}=\mathbf{D}\nabla^2\mathbf{q}+\mathbf{R}(\mathbf{q})
+\]
+
+<!--more-->
+
+The equation describes how the concentration of each chemical components in q evolves as a function of the other components. I have chosen to illustrate the Gray-Scott model; the physical derivation of the reactant term is described in detail in <a href="#2_grayscott">[2]</a>, the addition of the diffusion term and the resultant behaviour in <a href="#3_pearson">[3]</a>. The model has two chemical components, U and V and is described as follows.
+\[
+\begin{align*}
+\frac{\partial}{\partial t}U&=D_u\nabla^2U-UV^2+F(1-U) \\
+\frac{\partial}{\partial t}V&=D_v\nabla^2V+UV^2-(F+k)V 
+\end{align*}
+\]
+
+The model is what is knows as an activator-inhibitor model, in which one chemical acts to inhibit the growth of the other.
+<h3>Simulation</h3>
+The simulation is implemented with <a href="http://www.silverlight.net" target="_new">Silverlight 2.0</a>. For full details of the implementation see the separate <a href="http://www.planetmarshall.co.uk/index.php/2009/04/implentation-of-the-reaction-diffusion-simulation/">post</a>. For guidance in parameter selection, see <a href="#3_pearson">[3]</a>, or just select a preset and modify it. Note that the Png image generation feature currently requires the <a target="_new" href="http://www.mozilla.com/firefox/">Firefox</a> browser.
+
+<object width="450" height="300"
+    data="data:application/x-silverlight-2," 
+    type="application/x-silverlight-2" >
+    <param name="source" value="http://www.planetmarshall.co.uk/apps/rdsim/ReactionDiffusion.xap"/>
+</object>
+<h3>Gallery</h3>
+[gallery=5]
+<h3>References</h3>
+<ol>
+<li><a name="1_turing"></a>Turing,A.,1952. <a target="_new" href="http://www.dna.caltech.edu/courses/cs191/paperscs191/turing.pdf">The chemical basis of morphogenesis [pdf]</a>. <i>Philosophical Transactions of the Royal Society</i>, 237 pp.37-72
+</li>
+<li><a name="2_grayscott"></a>Gray,P. and Scott,S.K. 1985. <a href="http://www.jstor.org/stable/2881810" target="_new">Sustained Oscillations and Other Exotic Patterns of Behavior in Isothermal Reactions.</a> <i>Journal of Physical Chemistry</i>, 89 pp.22-32
+</li>
+<li><a name="3_pearson"></a>Pearson,J.,1993. <a href="http://www.jstor.org/stable/2881810" target="_new">Complex patterns in a simple system.</a> <i>Science</i>, 261(5118) pp.189-192
+</li>
+</ol>

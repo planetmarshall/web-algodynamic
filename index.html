@@ -1,11 +1,23 @@
+---
+layout: post
+title: Planetmarshall Static Prototype
+---
 <!DOCTYPE html>
 <html>
  <head>
-  <title>Planetmarshall Static Prototype</title>
+		 <link href="assets/css/syntax.css" rel="stylesheet" type="text/css"/>
  </head>
  <body>
   <h1>Planetmarshall Amazon S3 Static Prototype</h1>
   Hello Static World!
+  <h2>Recent posts</h2>
+  <ul>
+		  {% for post in site.posts %}
+		  <li>
+		  	<a href="{{ post.url }}">{{ post.title}}</a>
+		 </li>
+		{% endfor %}
+  </ul>
  </body>
 </html>
 

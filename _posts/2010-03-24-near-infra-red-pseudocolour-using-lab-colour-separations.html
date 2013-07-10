@@ -1,0 +1,40 @@
+---
+layout: post
+title: Near Infra Red Pseudocolour using LAB Colour Separations
+tags:
+- Imaging
+- Photography
+- Software
+status: publish
+type: post
+published: true
+meta:
+  dsq_thread_id: '271119315'
+---
+<p>[singlepic id=124 w=120 float=right]</p>
+<p class="pm_first">As 2010 is the <a title="BBC article on the history of Infra Red photography" href="http://www.bbc.co.uk/blogs/photoblog/2010/01/on_a_different_wavelength_100_years_of_infrared_ph.html" target="_blank">100th anniversary of the first published infra red photograph</a>, I thought I'd try my hand using my own digital camera and some easily acquired accessories. If you want, you can <a href="http://www.planetmarshall.co.uk/2010/03/near-infra-red-pseudocolour-using-lab-colour-separations/#method">skip</a> the theory and go straight to the description of the method and a script for Photoshop.</p>
+<h3>A quick overview of IR photography</h3>
+<p>The <a title="Wikipedia's entry on the Charge-Coupled Device" href="http://en.wikipedia.org/wiki/Charge-coupled_device" target="_blank">CCD</a> that is responsible for recording the images photographed by most digital cameras, is already sensitive to the near infra red part of the spectrum. That is, the part of the spectrum outside of the range visible to the human eye, but not so far as that used for, for example, thermal imaging. Since most photographers are not interested in light that they can't see, this light is usually filtered out by an infra red <em>cutoff </em>filter placed inside the camera body, directly in front of the CCD. However, such filters are imperfect, so with some camera models by [singlepic id=120 w=120 float=left] combining a long exposure with an infra red <em>transmitting </em>filter placed in front of the lens, some of that IR light can be recovered. The figure shows the basic principle, though I should add that the graphs are just a sketch to illustrate the principle and don't represent an actual CCD response curve.</p>
+<!--more--></p>
+<h3>Pseudocolour</h3>
+<p>[singlepic id=129 w=120 float=right]Since IR light is invisible, some method is needed to represent it in terms of the colours that we can see. Typically, this is often done by simply mapping the intensities of the IR image to a greyscale, with the result being a black and white photo with a slightly surreal look. For my photographs, however, I wanted to try an alternative method.</p>
+<h3>The LAB Colour Model</h3>
+<p>[singlepic id=122 w=120 float=left]The most common method of representing a colour image is by a combination of Red, Green and Blue 'colour primaries'. The reason for this is simply because it then becomes relatively trivial to display an image using a video display, which also constructs an image using a combination of red, green and blue LEDs or phosphors. This is why such a model is known as a 'device dependent' model. However, RGB is not the only colour model, and if you are at all familiar with Photoshop you may be aware of the LAB model.</p>
+<p>[singlepic id=121 w=120 float=right]LAB, or <a title="Wikipedia's entry on the CIELAB colour space" href="http://en.wikipedia.org/wiki/Lab_color_space" target="_blank">CIELAB </a>to give it its full name, is a device independent model, which like RGB is composed of three components ( or channels ) but in this case only the 'A' and 'B' components contain colour information, whereas the 'L' component contains pure luminosity information. Thus, by separating an image into LAB components it becomes possible to manipulate the luminosity and colour components of an image independently.<br />
+<a name="method"></a></p>
+<h3>Method and Implementation in Photoshop</h3>
+<h4>Equipment</h4>
+<ol>
+<li>Canon G10 Digital Compact Camera</li>
+<li>LA-DC58K lens adapter for same</li>
+<li>Hoya R72 58mm Infra Red filter</li>
+<li>Tripod</li>
+<li>Photoshop ( or GIMP )</li>
+</ol>
+<p>The images in this post have been created from two source images, one a long exposure taken using the IR filter and the other a conventional colour image. Both images are converted into the LAB colour space, and a single image is then produced, using the Luminosity channel from the IR image and the 'A' and 'B' channels from the colour image. The photoshop script below will automate the process when applied to two source images, you can then manipulate the final image using the adjustment tools. You can also do much the same thing in GIMP using the Decompose/Compose features from the Colour menu, but it does not include Photoshop's image registration or LAB colour adjustment features.</p>
+<p>Download <a href="http://www.planetmarshall.co.uk/code/photoshop/ir_composite.jsx.zip">ir_composite.jsx.zip</a></p>
+<p>To use the script, open the IR and corresponding colour image, and ensure that the IR image is selected. Then apply the script.</p>
+<h3>Practicalities</h3>
+<p>There are a number of limitations to multiple exposure photography methods such as this, especially ones which require long exposures and changes of camera equipment. It is best suited to landscape photography in good conditions where the multiple exposures can be easily aligned. If either image contains rapidly moving subjects these can ( and will ) show up as artefacts in the resulting image.</p>
+<h3>Gallery</h3>
+<p>[nggallery id=12]</p>
