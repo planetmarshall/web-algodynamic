@@ -1,0 +1,52 @@
+@import "bootstrap-4.0.0/scss/functions";
+@import "bootstrap-4.0.0/scss/variables";
+@import "bootstrap-4.0.0/scss/mixins";
+
+/* Color Theme Swatches in Hex */
+$dark-les-1-hex: #25000A;
+$dark-les-2-hex: #590420;
+$dark-les-3-hex: #000F24;
+$dark-les-4-hex: #00090D;
+$dark-les-5-hex: #AD9A6B;
+
+.highlight {
+    pre {
+        padding: 0.5em;
+    }
+}
+
+h1 {
+    small {
+        font-size: 30%;
+    }
+    a:hover {
+        color: $dark-les-2-hex;
+    }
+}
+
+a {
+    color: $dark-les-2-hex;
+}
+
+a:hover {
+    color: $dark-les-5-hex;
+    text-decoration: none;
+}
+
+.navbar-dark {
+    background-color: $dark-les-1-hex;
+    a {
+        color: $dark-les-5-hex;
+    }
+}
+
+.btn-run {
+    @include button-variant($dark-les-2-hex, $dark-les-5-hex, $dark-les-1-hex)
+}
+
+footer {
+    font-size: 75%;
+}
+
+
+
