@@ -1,16 +1,15 @@
 
 module Jekyll
-	class MathJaxTag < Liquid::Raw
+	class MathJaxTag < Liquid::Block
 
-		def initialize(tag_name, markup, tokens)
+		def initialize(tag_name, text, tokens)
 			super
-
 		end
 
 		def render(context)
-			text = super
-			#"\\\\\\[#{text.inspect}\\\\\\]"
-			@nodelist.join('\n')
+			math = @nodelist.join
+			slashed = math.gsub("\\\\", "\\\\\\\\\\")
+			"\\\\\\[ #{slashed} \\\\\\]"
 		end
 
 	end

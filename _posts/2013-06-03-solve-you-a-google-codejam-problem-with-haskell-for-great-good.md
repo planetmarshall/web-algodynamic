@@ -4,7 +4,7 @@ title: Solve You a Google Codejam Problem with Haskell for Great Good*
 tags: []
 type: post
 ---
-Every year Google runs a <a title="Google CodeJam" href="http://code.google.com/codejam/" target="_blank">CodeJam competition</a> for programmers with a competitive streak. There are several rounds, with the problems in each round usually being based on classic computer science problems, such as graph traversal or combinatorial optimization, with just enough variation thrown in to force you to think for yourself ( and presumably to make it tricky to use a prepackaged library function that can do it in one line of code ). Since on my list of things to do this year was to learn Haskell, I decided to use <a title="Google CodeJam 2008, Round 1" href="http://code.google.com/codejam/contest/32016/dashboard#s=p0" target="_blank">one of the previous contests</a> to make use of the language and to explore some algorithms.
+Every year Google runs a [CodeJam competition](http://code.google.com/codejam/ "Google CodeJam") for programmers with a competitive streak. There are several rounds, with the problems in each round usually being based on classic computer science problems, such as graph traversal or combinatorial optimization, with just enough variation thrown in to force you to think for yourself ( and presumably to make it tricky to use a prepackaged library function that can do it in one line of code ). Since on my list of things to do this year was to learn Haskell, I decided to use [one of the previous contests](http://code.google.com/codejam/contest/32016/dashboard#s=p0 "Google CodeJame 2008, Round 1") to make use of the language and to explore some algorithms.
 
 <em>This seemingly dodgy grammar is in reference to the Haskell Tutorial <a href="http://learnyouahaskell.com/" target="_blank">"Learn You a Haskell for Great Good</a>", possibly the greatest programming language tutorial ever written, and the basis of much of the work I've done here. It's available online for free, but I recommend buying a copy if only because the author deserves it.</em>
 
@@ -12,9 +12,9 @@ I've chosen to tackle the first and third problems ( mainly because I didn't fin
 
 Scalar Product
 --------------
-<blockquote>You are given two vectors \(v_1=(x_1,x_2,\dotsb,x_n)\) and \(v_2=(y_1,y_2,\dotsb,y_n)\)...Suppose you are allowed to permute the coordinates of each vector as you wish. Choose two permutations such that the scalar product of your two new vectors is the smallest possible, and output that minimum scalar product.</blockquote>
+>You are given two vectors \(v_1=(x_1,x_2,\dotsb,x_n)\) and \(v_2=(y_1,y_2,\dotsb,y_n)\)...Suppose you are allowed to permute the coordinates of each vector as you wish. Choose two permutations such that the scalar product of your two new vectors is the smallest possible, and output that minimum scalar product.
 This is classic combinatorial optimization, and can be restated in terms of the Linear Assignment problem,
-<blockquote>Given a component \(x_i\) in the vector \(v_1\), assign to it a component \(y_i\) in the vector \(v_2\) such that the total cost \(\sum^n x_i y_i\) is minimized.</blockquote>
+>Given a component \(x_i\) in the vector \(v_1\), assign to it a component \(y_i\) in the vector \(v_2\) such that the total cost \(\sum^n x_i y_i\) is minimized.
 
 The Hungarian Algorithm
 -----------------------
@@ -25,7 +25,7 @@ The most obvious solution is simple brute force, trying each pairwise component 
 \begin{pmatrix}
 1 & 2 & 4 \\
 -5 & -10 & -20 \\
-3 &amp; 6 &amp; 12
+3 & 6 & 12
 \end{pmatrix}
 {% endmath %}
 
@@ -36,15 +36,15 @@ In Haskell, we can create the cost matrix using the <a title="hmatrix 0.14" href
 {% highlight haskell %}
 import Numeric.LinearAlgebra
 
-costMatrix :: ([Double],[Double]) -&gt; Matrix Double
+costMatrix :: ([Double],[Double]) -> Matrix Double
 costMatrix (u,v) = (mx u) * (trans $ mx u)
     where mx w = fromLists [w]
 {% endhighlight %}
 
 
 {% highlight haskell %}
-ghci&gt; costMatrix([1,-5,3],[-2,1,4])
-3&gt;&lt;3
+ghci > costMatrix([1,-5,3],[-2,1,4])
+3><3
 [ -2.0, 10.0, -6.0
 ,  1.0, -5.0, 3.0
 , 4.0, -20.0, 12.0]
@@ -54,12 +54,10 @@ The first thing to determine is if the problem is actually solved, as it's possi
 
 First we define a few utility functions
 
-Get the index of the next zero in the matrix
+This function gets a 2 dimensional index for the next zero in the matrix
 {% highlight haskell %}
-nextZeroIndex :: Matrix Double -&gt; Maybe (Int,Int)
-nextZeroIndex mx = 
-  | isJust i = (i `div` n, i `mod` n)
-  | isNothing i = Nothing
+nextZeroIndex :: Matrix Double -> Maybe (Int,Int)
+nextZeroIndex mx = i >>= \k -> return (k `div` n, k `mod` n)
   where i = elemIndex 0.0 $ toList $ flatten mx
         n = rows mx
 {% endhighlight %}
