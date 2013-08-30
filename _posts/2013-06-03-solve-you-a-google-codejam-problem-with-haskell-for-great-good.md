@@ -11,13 +11,13 @@ Every year Google runs a [CodeJam competition](http://code.google.com/codejam/ "
 I've chosen to tackle the first and third problems ( mainly because I didn't find the second very interesting ). The third problem, 'Numbers' will be detailed in a follow up post. It was going to be part of this one but then it exploded somewhat as I went off on exploratory algorithmic tangents.
 
 Scalar Product
---------------
+==============
 >You are given two vectors \(v_1=(x_1,x_2,\dotsb,x_n)\) and \(v_2=(y_1,y_2,\dotsb,y_n)\)...Suppose you are allowed to permute the coordinates of each vector as you wish. Choose two permutations such that the scalar product of your two new vectors is the smallest possible, and output that minimum scalar product.
 This is classic combinatorial optimization, and can be restated in terms of the Linear Assignment problem,
 >Given a component \(x_i\) in the vector \(v_1\), assign to it a component \(y_i\) in the vector \(v_2\) such that the total cost \(\sum^n x_i y_i\) is minimized.
 
 The Hungarian Algorithm
------------------------
+=======================
 The most obvious solution is simple brute force, trying each pairwise component in turn until we find the minimum. It should be equally obvious that we can rule this out out for all but the smallest vectors as it has \(O(n!)\) complexity ( There are \(n!\) ways of permuting a vector with \(n\) elements). Fortunately there exists a much more efficient solution for this problem known as the <a title="Hungarian Algorithm from Wikipedia" href="http://en.wikipedia.org/wiki/Hungarian_algorithm" target="_blank">Hungarian Method</a>. As an example, take the vectors \(\mathbf{x}=(1,-5,3)\) and \(\mathbf{y}=(-2,1,4)\). Then write the product of each pair of components as a cost matrix,
 
 {% math %}
@@ -69,9 +69,15 @@ data Slice = Row | Column
 
 Create a new matrix by dropping a row or column
 {% highlight haskell %}
-dropSlice :: Matrix Double -&gt; Slice -&gt; Int -&gt; Matrix Double
-dropSlice mx Row i = fromBlocks [[takeColumns (i-1) mx, dropColumns i mx]]
-dropSlice mx Column i = fromBlocks [[takeRows (i-1) mx],[dropRows i mx]]
+dropSlice :: Matrix Double -> Slice -> Int -> Matrix Double
+dropSlice mx Row i
+	| i == 0 = dropRows 0 mx
+	| i == (rows mx) - 1 = takeRows (i-1) mx
+	| otherwise = fromBlocks [[takeRows i mx],[ dropRows i+1 mx] ]
+dropSlice mx Column i
+	| i == 0 = dropColumns 0 mx
+	| i == (cols mx) - 1 = takeColumns (i-1) mx
+	| otherwise = fromBlocks [[takeColumns i mx, dropColumns i+1 mx] ]
 {% endhighlight %}
 
 We can now evaluate a cost matrix as follows
