@@ -1,10 +1,27 @@
 <!DOCTYPE html>
 <html>
  <head>
+		 <title>{{page.title}}</title>
+		 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 		 <link href="/assets/css/bootstrap.css" rel="stylesheet" type="text/css"/>
 		 <link href="/assets/css/bootstrap-responsive.css" rel="stylesheet" type="text/css"/>
 		 <link href="/assets/css/syntax.css" rel="stylesheet" type="text/css"/>
 		 <link href="/assets/css/styles.css" rel="stylesheet" type="text/css"/>
  </head>
  <body>
+		 <div class="container">
+			 <div id="image_header" class="carousel slide">
+				 <ol class ="carousel-indicators">
+					 <li data-target="#image_header" data-slide-to="0" class="active"></li>
+					 <li data-target="#image_header" data-slide-to="1"></li>
+					 <li data-target="#image_header" data-slide-to="2"></li>
+				</ol>
+				<div class="carousel-inner">
+					<div class="active item"></div>
+					<div class="item"></div>
+					<div class="item"></div>
+				</div>
+				<a class="carousel-control left" href="#image_header" data-slide="prev">&lsaquo;</a>
+				<a class="carousel-control right" href="#image_header" data-slide="prev">&rsaquo;</a>
+			</div>
 

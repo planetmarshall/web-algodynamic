@@ -4,28 +4,28 @@ title: Solve You a Google Codejam Problem with Haskell for Great Good*
 tags: []
 type: post
 ---
-Every year Google runs a [CodeJam competition](http://code.google.com/codejam/ "Google CodeJam") for programmers with a competitive streak. There are several rounds, with the problems in each round usually being based on classic computer science problems, such as graph traversal or combinatorial optimization, with just enough variation thrown in to force you to think for yourself ( and presumably to make it tricky to use a prepackaged library function that can do it in one line of code ). Since on my list of things to do this year was to learn Haskell, I decided to use [one of the previous contests](http://code.google.com/codejam/contest/32016/dashboard#s=p0 "Google CodeJame 2008, Round 1") to make use of the language and to explore some algorithms.
+Every year Google runs a [CodeJam competition](http://code.google.com/codejam/ "Google CodeJam") for programmers with a competitive streak. There are several rounds, with the problems in each round usually being based on classic computer science problems, such as graph traversal or combinatorial optimization, with just enough variation thrown in to force you to think for yourself ( and presumably to make it tricky to use a prepackaged library function that can do it in one line of code ). Since on my list of things to do this year was to learn Haskell, I decided to use [one of the previous contests](http://code.google.com/codejam/contest/32016/dashboard#s=p0 "Google CodeJame 2008, Round 1") to make use of the language and to explore some algorithms.
 
-<em>This seemingly dodgy grammar is in reference to the Haskell Tutorial <a href="http://learnyouahaskell.com/" target="_blank">"Learn You a Haskell for Great Good</a>", possibly the greatest programming language tutorial ever written, and the basis of much of the work I've done here. It's available online for free, but I recommend buying a copy if only because the author deserves it.</em>
+This seemingly dodgy grammar is in reference to the Haskell Tutorial <a href="http://learnyouahaskell.com/" target="_blank">"Learn You a Haskell for Great Good</a>", possibly the greatest programming language tutorial ever written, and the basis of much of the work I've done here. It's available online for free, but I recommend buying a copy if only because the author deserves it.
 
 I've chosen to tackle the first and third problems ( mainly because I didn't find the second very interesting ). The third problem, 'Numbers' will be detailed in a follow up post. It was going to be part of this one but then it exploded somewhat as I went off on exploratory algorithmic tangents.
 
 Scalar Product
 --------------
->You are given two vectors \(v_1=(x_1,x_2,\dotsb,x_n)\) and \(v_2=(y_1,y_2,\dotsb,y_n)\)...Suppose you are allowed to permute the coordinates of each vector as you wish. Choose two permutations such that the scalar product of your two new vectors is the smallest possible, and output that minimum scalar product.
+>You are given two vectors {% m v_1=(x_1,x_2,\dotsb,x_n) %} and {% m v_2=(y_1,y_2,\dotsb,y_n) %}...Suppose you are allowed to permute the coordinates of each vector as you wish. Choose two permutations such that the scalar product of your two new vectors is the smallest possible, and output that minimum scalar product.
 This is classic combinatorial optimization, and can be restated in terms of the Linear Assignment problem,
->Given a component \(x_i\) in the vector \(v_1\), assign to it a component \(y_i\) in the vector \(v_2\) such that the total cost \(\sum^n x_i y_i\) is minimized.
+>Given a component {% m x_i %} in the vector {% m v_1 %}, assign to it a component {% m y_i %} in the vector {% m v_2 %} such that the total cost {% m \sum^n x_i y_i %} is minimized.
 
 The Hungarian Algorithm
 -----------------------
-The most obvious solution is simple brute force, trying each pairwise component in turn until we find the minimum. It should be equally obvious that we can rule this out out for all but the smallest vectors as it has \(O(n!)\) complexity ( There are \(n!\) ways of permuting a vector with \(n\) elements). Fortunately there exists a much more efficient solution for this problem known as the <a title="Hungarian Algorithm from Wikipedia" href="http://en.wikipedia.org/wiki/Hungarian_algorithm" target="_blank">Hungarian Method</a>. As an example, take the vectors \(\mathbf{x}=(1,-5,3)\) and \(\mathbf{y}=(-2,1,4)\). Then write the product of each pair of components as a cost matrix,
+The most obvious solution is simple brute force, trying each pairwise component in turn until we find the minimum. It should be equally obvious that we can rule this out out for all but the smallest vectors as it has {% m O(n!) %} complexity ( There are {% m n! %} ways of permuting a vector with {% m n %} elements). Fortunately there exists a much more efficient solution for this problem known as the <a title="Hungarian Algorithm from Wikipedia" href="http://en.wikipedia.org/wiki/Hungarian_algorithm" target="_blank">Hungarian Method</a>. As an example, take the vectors {% m \mathbf{x}=(1,-5,3) %} and {% m \mathbf{y}=(-2,1,4) %}. Then write the product of each pair of components as a cost matrix,
 
 {% math %}
 \mathbf{x}\cdot\mathbf{y}^T =
 \begin{pmatrix}
-1 & 2 & 4 \\
--5 & -10 & -20 \\
-3 & 6 & 12
+-2 & 10 & -6 \\
+1 & -5 & 3 \\
+4 & -20 & 12
 \end{pmatrix}
 {% endmath %}
 
@@ -47,10 +47,10 @@ ghci > costMatrix([1,-5,3],[-2,1,4])
 3><3
 [ -2.0, 10.0, -6.0
 ,  1.0, -5.0, 3.0
-, 4.0, -20.0, 12.0]
+, 4.0, -20.0, 12.0 ]
 {% endhighlight %}
 
-The first thing to determine is if the problem is actually solved, as it's possible that the components of the vectors could already be arranged such that the scalar product is minimized. Imagine drawing a line over one column or row of the matrix, covering its zeroes. When it requires exactly N lines where N is the size of the vector, then the problem is solved. As it happens, this actually constitutes the bulk of the algorithm - which I've decided to implement as a backtracking search. This kind of recursive approach tends to be what functional languages do best.
+The first thing to determine is if the problem is actually solved, as it's possible that the components of the vectors could already be arranged such that the scalar product is minimized. Imagine drawing a line over one column or row of the matrix, covering its zeroes. When it requires exactly N lines where N is the size of the vector, then the problem is solved. As it happens, determining if we have a solution constitutes the bulk of the algorithm - which I've decided to implement as a backtracking search. This kind of recursive approach is easy to implement using functional programming.
 
 First we define a few utility functions
 
@@ -69,7 +69,7 @@ data Slice = Row | Column
 
 Create a new matrix by dropping a row or column
 {% highlight haskell %}
-dropSlice :: Matrix Double -&gt; Slice -&gt; Int -&gt; Matrix Double
+dropSlice :: Matrix Double -> Slice -> Int -> Matrix Double
 dropSlice mx Row i = fromBlocks [[takeColumns (i-1) mx, dropColumns i mx]]
 dropSlice mx Column i = fromBlocks [[takeRows (i-1) mx],[dropRows i mx]]
 {% endhighlight %}
