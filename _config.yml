@@ -1,1 +1,18 @@
 markdown : redcarpet
+headers : 
+ - 
+    img : dione_view.jpg
+    title : Dione, Tantalus Range, British Columbia
+    caption : The view from the summit of Dione. June 2012
+ - 
+    img : fairfield.jpg
+    title : The Fairfield Horseshoe, Cumbria
+    caption : Chris and Helen on the Fairfield Horseshoe in the Lake District
+ - 
+    img : cormac_serratus.jpg
+    title : Serratus, Tantalus Range, British Columbia
+    caption : Cormac Flynn on the summit of Serratus. June 2012
+ - 
+    img : toll_an_lochain.jpg
+    title : Toll an Lochain, An Teallach, Scotland
+    caption : Toll an Lochain during a particularly wintry Easter. April 2013
