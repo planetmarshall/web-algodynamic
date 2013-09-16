@@ -1,3 +1,4 @@
+url: localhost:4000/index.html
 markdown : redcarpet
 headers : 
  - 
@@ -16,3 +17,7 @@ headers :
     img : toll_an_lochain.jpg
     title : Toll an Lochain, An Teallach, Scotland
     caption : Toll an Lochain during a particularly wintry Easter. April 2013
+ -
+    img : traprain.jpg
+    title : Traprain Law, Midlothian, Scotland
+    caption : Climbers on Traprain Law late one Summer evening. July 2013
