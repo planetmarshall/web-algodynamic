@@ -9,7 +9,7 @@
 		 <link href="/assets/css/styles.css" rel="stylesheet" type="text/css"/>
  </head>
  <body>
-			 <div id="image_header" class="carousel slide" data-interval="8000">
+			 <div id="image_header" class="carousel slide">
 				 <ol class ="carousel-indicators">
 					 {% for header in site.headers %}
 					 {% if forloop.index0 == 0 %}
@@ -22,7 +22,7 @@
 				<div class="carousel-inner">
 					 {% for header in site.headers %}
 					 {% if forloop.index0 == 0 %}
-					 <div class="active item">
+					 <div class="item active">
 						 <img src="/assets/img/headers/{{header.img}}" alt="{{header.title}}"/>
 						<div class="carousel-caption">
 							<h4>{{header.title}}</h4>
