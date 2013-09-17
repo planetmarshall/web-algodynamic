@@ -120,17 +120,17 @@ The first step in the algorithm is to subtract from each row, the minimum value 
 {% endmath %}
 
 {% highlight haskell %}
-subtractMin m = fromRows [v - min | v &lt;- (toRows m), let min = minVec v ]
+subtractMin m = fromRows [v - min | v <- (toRows m), let min = minVec v ]
     where minVec v = scalar . minimum $ toList v
 {% endhighlight %}
 
 {% highlight haskell %}
-ghci&gt; subtractMin mx
-3&gt;&lt;3
+ghci> subtractMin mx
+3><3
 [ 0.0,  1.0,  3.0,
  15.0, 10.0, 0.0,
   0.0,  3.0, 9.0]
-ghci&gt; isSolved ( subtractMin mx )
+ghci> isSolved ( subtractMin mx )
 False
 {% endhighlight %}
 
@@ -138,27 +138,27 @@ We then repeat the step but on the columns of the matrix.
 
 {% math %}
 \begin{pmatrix}
-0 &amp; 1 &amp; 3 \\
-15 &amp; 10 &amp; 0 \\
-0 &amp; 3 &amp; 9
+0 & 1 & 3 \\
+15 & 10 & 0 \\
+0 & 3 & 9
 \end{pmatrix}
 \longrightarrow
 \begin{pmatrix}
-0 &amp; 0 &amp; 3 \\
-15 &amp; 9 &amp; 0 \\
-0 &amp; 2 &amp; 9
+0 & 0 & 3 \\
+15 & 9 & 0 \\
+0 & 2 & 9
 \end{pmatrix}
 {% endmath %}
 
 In haskell this is done by simply performing the same step on the transposed matrix ( and transposing the result )
 
 {% highlight haskell %}
-ghci&gt; trans . subtractMin . trans mx
-3&gt;&lt;3
+ghci> trans . subtractMin . trans mx
+3><3
 [ 0.0,  0.0,  3.0,
  15.0, 9.0, 0.0,
   0.0,  2.0, 9.0]
-ghci&gt; isSolved ( trans . subtractMin $ trans mx )
+ghci> isSolved ( trans . subtractMin $ trans mx )
 False
 {% endhighlight %}
 
@@ -167,19 +167,19 @@ In actual fact, the first step in implementing this algorithm is determining wh
 I've opted to do this using a backtracking search. At each step we find the zeros in the current row, and then eliminate the columns containing those zeros from the rest of the matrix and continue with the next row. The problem is solved if we can reach the end of the matrix without stopping. This kind of recursive algorithm is easy to express in a functional programming language like Haskell.
 
 {% highlight haskell %}
-solution :: Matrix Double -&gt; [Int]
+solution :: Matrix Double -> [Int]
 solution mx
   | length sol == rows mx = sol
   | otherwise = []
   where sol = findZeros $ toLists mx
 
-findZeros :: ([[Double]],Int) -&gt; [Int]
+findZeros :: ([[Double]],Int) -> [Int]
 findZeros  (_,-2) = []
 findZeros ((firstRow:rows),i) = i : maximumBy (compare `on` length) nextZeros
   where nextZeros = map findZeros $ zip nextRows zeroIndices
         nextRows = map row2col reducedColumns
         reducedColumns = map (reduceColumn (zip (trans rows) [0..n])) zeroIndices
-        reduceColumn columns z = map fst $ filter (\(_,k)-&gt; k /= z) columns
+        reduceColumn columns z = map fst $ filter (\(_,k)-> k /= z) columns
         n = length rows
         zeroIndices = zeroElements firstRow
 {% endhighlight %}
