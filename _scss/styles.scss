@@ -4,11 +4,15 @@ $title-font: Raleway;
 $main-font: 'Open Sans';
 
 h1, h2, h3, h4 {
-	font-family: $title-font, sans-serif;
+	font: {
+		family: $title-font, sans-serif;
+	}
 }
 
 p {
-	font-family: $main-font, sans-serif;
+	font: {
+		family: $main-font, sans-serif;
+	}
 }
 
 /* Recent posts */
@@ -34,9 +38,19 @@ p {
 .carousel-caption {
 	text-align: left;
 	left: 1em;
+	padding: 0;
+	top: 0;
 }
 
 .carousel-indicators {
-	right: 1em;
+	left: default;
+	text-align: default;
+	width: default;
+}
+
+/* Override bootstrap messing with pre tags */
+pre {
+	background-color: default;
+	border: default;
 }
 
