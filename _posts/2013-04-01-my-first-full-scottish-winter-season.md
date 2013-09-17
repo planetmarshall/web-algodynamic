@@ -1,10 +1,7 @@
 ---
 layout: post
 title: My First Full Scottish Winter Season
-tags:
-- Climbing
-status: publish
-type: post
+tags: [Climbing]
 published: true
 ---
 As I write this, the Scottish winter is not just hanging in there, it's colder now than it was in any of the Winter months and it's likely I could yet get some more winter routes in the bag before the season is over, however I wanted to write this up while the memories were still fresh.

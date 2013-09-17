@@ -5,6 +5,13 @@ h1, h2, h3, h4 {
 p {
   font-family: "Open Sans", sans-serif; }
 
+/* Recent posts */
+.recent-posts ul {
+  list-style-type: none; }
+
+.navbar {
+  border-radius: 0; }
+
 /* Bootstrap Carousel styles */
 .carousel .item {
   -webkit-transition: opacity 3s;
@@ -18,17 +25,14 @@ p {
   opacity: 0;
   z-index: 2; }
 
-.carousel .active.right {
-  left: 0;
-  opacity: 0;
-  z-index: 2; }
-
 .carousel .next {
   left: 0;
   opacity: 1;
   z-index: 1; }
 
-.carousel .prev {
-  left: 0;
-  opacity: 1;
-  z-index: 1; }
+.carousel-caption {
+  text-align: left;
+  left: 1em; }
+
+.carousel-indicators {
+  right: 1em; }
