@@ -14,25 +14,28 @@ p {
 
 /* Bootstrap Carousel styles */
 .carousel .item {
-  -webkit-transition: opacity 3s;
-  -moz-transition: opacity 3s;
-  -ms-transition: opacity 3s;
-  -o-transition: opacity 3s;
-  transition: opacity 3s; }
-
-.carousel .active.left {
-  left: 0;
+  left: 0 !important;
+  transition: opacity 1.0s; }
+.carousel .active.left, .carousel .active.right {
   opacity: 0;
   z-index: 2; }
-
-.carousel .next {
-  left: 0;
+.carousel .next.left, .carousel .prev.right {
   opacity: 1;
   z-index: 1; }
 
 .carousel-caption {
   text-align: left;
-  left: 1em; }
+  left: 1em;
+  padding: 0;
+  top: 0; }
 
 .carousel-indicators {
-  right: 1em; }
+  left: default;
+  text-align: default;
+  width: default; }
+
+/* Override bootstrap messing with pre tags */
+pre {
+  background-color: #272822;
+  border-radius: 0px;
+  border: 0px solid; }
