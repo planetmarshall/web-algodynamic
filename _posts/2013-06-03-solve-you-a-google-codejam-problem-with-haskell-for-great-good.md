@@ -11,13 +11,15 @@ This seemingly dodgy grammar is in reference to the Haskell Tutorial <a href="ht
 I've chosen to tackle the first and third problems ( mainly because I didn't find the second very interesting ). The third problem, 'Numbers' will be detailed in a follow up post. It was going to be part of this one but then it exploded somewhat as I went off on exploratory algorithmic tangents.
 
 Scalar Product
-==============
->You are given two vectors {% m v_1=(x_1,x_2,\dotsb,x_n) %} and {% m v_2=(y_1,y_2,\dotsb,y_n) %}...Suppose you are allowed to permute the coordinates of each vector as you wish. Choose two permutations such that the scalar product of your two new vectors is the smallest possible, and output that minimum scalar product.
-This is classic combinatorial optimization, and can be restated in terms of the Linear Assignment problem,
->Given a component {% m x_i %} in the vector {% m v_1 %}, assign to it a component {% m y_i %} in the vector {% m v_2 %} such that the total cost {% m \sum^n x_i y_i %} is minimized.
+---------------
+
+>You are given two vectors {% m v\_1=(x\_1,x\_2,\dotsb,x\_n) %} and {% m v_2=(y_1,y_2,\dotsb,y_n) %}...Suppose you are allowed to permute the coordinates of each vector as you wish. Choose two permutations such that the scalar product of your two new vectors is the smallest possible, and output that minimum scalar product.
+
+This is classic combinatorial optimization, and can be restated in terms of the Linear Assignment problem: Given a component {% m x_i %} in the vector {% m v_1 %}, assign to it a component {% m y_i %} in the vector {% m v_2 %} such that the total cost {% m \sum^n x_i y_i %} is minimized.
 
 The Hungarian Algorithm
-=======================
+-----------------------
+
 The most obvious solution is simple brute force, trying each pairwise component in turn until we find the minimum. It should be equally obvious that we can rule this out out for all but the smallest vectors as it has {% m O(n!) %} complexity ( There are {% m n! %} ways of permuting a vector with {% m n %} elements). Fortunately there exists a much more efficient solution for this problem known as the <a title="Hungarian Algorithm from Wikipedia" href="http://en.wikipedia.org/wiki/Hungarian_algorithm" target="_blank">Hungarian Method</a>. As an example, take the vectors {% m \mathbf{x}=(1,-5,3) %} and {% m \mathbf{y}=(-2,1,4) %}. Then write the product of each pair of components as a cost matrix,
 
 {% math %}
