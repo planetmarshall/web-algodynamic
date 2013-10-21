@@ -13,7 +13,7 @@ I've chosen to tackle the first and third problems ( mainly because I didn't fin
 Scalar Product
 ---------------
 
->You are given two vectors {% m v\_1=(x\_1,x\_2,\dotsb,x\_n) %} and {% m v_2=(y_1,y_2,\dotsb,y_n) %}...Suppose you are allowed to permute the coordinates of each vector as you wish. Choose two permutations such that the scalar product of your two new vectors is the smallest possible, and output that minimum scalar product.
+>You are given two vectors {% m v_1=(x_1,x_2,\dotsb,x_n) %} and {% m v_2=(y_1,y_2,\dotsb,y_n) %}...Suppose you are allowed to permute the coordinates of each vector as you wish. Choose two permutations such that the scalar product of your two new vectors is the smallest possible, and output that minimum scalar product.
 
 This is classic combinatorial optimization, and can be restated in terms of the Linear Assignment problem: Given a component {% m x_i %} in the vector {% m v_1 %}, assign to it a component {% m y_i %} in the vector {% m v_2 %} such that the total cost {% m \sum^n x_i y_i %} is minimized.
 
@@ -72,14 +72,14 @@ data Slice = Row | Column
 Create a new matrix by dropping a row or column
 {% highlight haskell %}
 dropSlice :: Matrix Double -> Slice -> Int -> Matrix Double
-dropSlice mx Row i
-	| i == 0 = dropRows 0 mx
-	| i == (rows mx) - 1 = takeRows (i-1) mx
-	| otherwise = fromBlocks [[takeRows i mx],[ dropRows i+1 mx] ]
-dropSlice mx Column i
-	| i == 0 = dropColumns 0 mx
-	| i == (cols mx) - 1 = takeColumns (i-1) mx
-	| otherwise = fromBlocks [[takeColumns i mx, dropColumns i+1 mx] ]
+dropSlice mx Column i 
+	| i == 0 = dropColumns 1 mx
+	| i == (cols mx) - 1 = takeColumns i mx
+	| otherwise = fromBlocks [[takeColumns i mx, dropColumns (i+1) mx]]
+dropSlice mx Row i 
+	| i == 0 = dropRows 1 mx
+	| i == (rows mx) - 1 = takeRows i mx
+	| otherwise = fromBlocks [[takeRows i mx],[dropRows (i+1) mx]]
 {% endhighlight %}
 
 We can now evaluate a cost matrix as follows

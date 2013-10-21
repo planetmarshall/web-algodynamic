@@ -8,7 +8,7 @@ module Jekyll
 
 		def render(context)
 			math = @nodelist.join
-			slashed = math.gsub("\\\\", "\\\\\\\\\\")
+			slashed = math.gsub("\\\\", "\\\\\\\\\\").gsub("_","\\_")
 			"\\\\\\[ #{slashed} \\\\\\]"
 		end
 
@@ -22,7 +22,7 @@ module Jekyll
 		end
 
 		def render(context)
-			"\\\\\\( #{@text} \\\\\\)"
+			"\\\\\\( #{@text} \\\\\\)".gsub("_","\\_")
 		end
 	end
 end

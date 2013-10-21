@@ -68,3 +68,40 @@ pre {
 	border: 0px solid;
 }
 
+/* Images */
+
+@mixin thumbnail($link-color, $active-link-color) {
+	border: 1px solid $link-color;
+	padding: 0.75em;
+	margin-top: 0.5em;
+	margin-bottom: 1em;
+	&:hover {
+		border: 1px solid $active-link-color;
+	}
+
+	img {
+		border: 1px solid $link-color;
+
+		&:hover {
+			border: 1px solid $active-link-color;
+		}
+	}
+}
+
+$link-color: #428bca;
+$active-link-color: #2a6496;
+.thumbnail-left {
+	@include thumbnail($link-color, $active-link-color);
+	float: left;
+	margin-right: 1em;
+	margin-left: 0;
+}
+
+.thumbnail-right {
+	@include thumbnail($link-color, $active-link-color);
+	float: right;
+	margin-right: 0em;
+	margin-left: 1em;
+}
+
+
