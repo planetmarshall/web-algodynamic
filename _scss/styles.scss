@@ -48,6 +48,19 @@ p {
 	}
 }
 
+@mixin meta {
+	border-bottom: 1px solid #eee;
+}
+
+.page-meta {
+	@include meta;
+}
+
+.excerpt-meta {
+	@include meta;
+}
+
+
 .carousel-caption {
 	text-align: left;
 	left: 1em;
