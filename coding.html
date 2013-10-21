@@ -1,15 +1,12 @@
 ---
-layout: category
+layout: index
 title: Coding
 ---
   <h2>Recent posts</h2>
   <div class="recent-posts">
 	  <ul>
 		  {% for post in site.tags.Coding %}
-		  <li>
-		  <a href="{{ post.url }}"><h3>{{ post.title}}</h3></a>
-			<p>{{ post.excerpt }}</p>
-		 </li>
+		  {% include excerpts.html %}
 		{% endfor %}
 	</ul>
   </ul>

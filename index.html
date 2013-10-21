@@ -1,15 +1,12 @@
 ---
-layout: category
+layout: index
 title: Andrew Marshall's Blog
 ---
   <h2>Recent posts</h2>
   <div class="recent-posts">
 	  <ul>
 		  {% for post in site.posts %}
-		  <li>
-		  <a href="{{ post.url }}"><h3>{{ post.title}}</h3></a>
-			<p>{{ post.excerpt }}</p>
-		 </li>
+		  {% include excerpts.html %}
 		{% endfor %}
 	</ul>
   </ul>
