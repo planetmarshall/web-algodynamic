@@ -23,6 +23,12 @@ p {
   opacity: 1;
   z-index: 1; }
 
+.page-meta {
+  border-bottom: 1px solid #eee; }
+
+.excerpt-meta {
+  border-bottom: 1px solid #eee; }
+
 .carousel-caption {
   text-align: left;
   left: 1em;
