@@ -20,7 +20,7 @@ This is classic combinatorial optimization, and can be restated in terms of the 
 The Hungarian Algorithm
 -----------------------
 
-The most obvious solution is simple brute force, trying each pairwise component in turn until we find the minimum. It should be equally obvious that we can rule this out out for all but the smallest vectors as it has {% m O(n!) %} complexity ( There are {% m n! %} ways of permuting a vector with {% m n %} elements). Fortunately there exists a much more efficient solution for this problem known as the <a title="Hungarian Algorithm from Wikipedia" href="http://en.wikipedia.org/wiki/Hungarian_algorithm" target="_blank">Hungarian Method</a>. As an example, take the vectors {% m \mathbf{x}=(1,-5,3) %} and {% m \mathbf{y}=(-2,1,4) %}. Then write the product of each pair of components as a cost matrix,
+The most obvious solution is simple brute force, trying each pairwise component in turn until we find the minimum. It should be equally obvious that we can rule this out out for all but the smallest vectors as it has {% m O(n!) %} complexity ( There are {% m n! %} ways of permuting a vector with {% m n %} elements). Fortunately there exists a much more efficient solution for this problem known as the [Hungarian Method](http://en.wikipedia.org/wiki/Hungarian_algorithm), which has {% m O(n^3) %} complexity. [This series of slides](http://www.math.harvard.edu/archive/20_spring_05/handouts/assignment_overheads.pdf) from Harvard explain it better and is the basis of the Haskell implementation. As an example, take the vectors {% m \mathbf{x}=(1,-5,3) %} and {% m \mathbf{y}=(-2,1,4) %}. Then write the product of each pair of components as a cost matrix,
 
 {% math %}
 \mathbf{x}\cdot\mathbf{y}^T =
@@ -33,11 +33,9 @@ The most obvious solution is simple brute force, trying each pairwise component 
 
 The key to the Hungarian Algorithm is the observation that adding ( or subtracting ) a constant value from any row or column does not change the nature of the solution. If we can do this in such a way so that there is a zero in the matrix for each assignment, then we have a solution.
 
-In Haskell, we can create the cost matrix using the <a title="hmatrix 0.14" href="http://hackage.haskell.org/package/hmatrix-0.14.1.0" target="_blank">hmatrix</a> library, as follows,
+In Haskell, we can create the cost matrix using the [hmatrix](http://hackage.haskell.org/package/hmatrix-0.14.1.0) library, as follows,
 
 {% highlight haskell %}
-import Numeric.LinearAlgebra
-
 costMatrix :: ([Double],[Double]) -> Matrix Double
 costMatrix (u,v) = (mx u) * (trans $ mx u)
     where mx w = fromLists [w]
@@ -52,138 +50,112 @@ ghci > costMatrix([1,-5,3],[-2,1,4])
 , 4.0, -20.0, 12.0 ]
 {% endhighlight %}
 
-The first thing to determine is if the problem is actually solved, as it's possible that the components of the vectors could already be arranged such that the scalar product is minimized. Imagine drawing a line over one column or row of the matrix, covering its zeroes. When it requires exactly N lines where N is the size of the vector, then the problem is solved. As it happens, determining if we have a solution constitutes the bulk of the algorithm - which I've decided to implement as a backtracking search. This kind of recursive approach is easy to implement using functional programming.
+The first step is to find the minimum value of each row in the cost matrix and then subtract that value from each row. This leaves the matrix with a zero in each row, indicating the lowest cost assignment. This new matrix may not be a solution, however, as those zeros could all lie in the same column - that is, the solution does not constitute a 'perfect matching'. It so happens that determining if we have a valid solution or not constitutes the bulk of the algorithm.
 
-First we define a few utility functions
+Imagine drawing a line over one column or row of the matrix, covering its zeroes. When it requires exactly N lines where N is the size of the vector, then the problem is solved. While it's easy to do this by eye for a small, say 3x3, cost matrix, we require a more systematic method - something that will scale to matrices with perhaps thousands of elements. I've opted for a classic divide-and-conquer pattern, something that is easily implemented in a functional programming language with recursion 
 
-This function gets a 2 dimensional index for the next zero in the matrix
+Having defined a few utility functions (see the full implementation for details on these), the recursive function which crosses out the zeros in the matrix looks like this:
+
 {% highlight haskell %}
-nextZeroIndex :: Matrix Double -> Maybe (Int,Int)
-nextZeroIndex mx = i >>= \k -> return (k `div` n, k `mod` n)
-  where i = elemIndex 0.0 $ toList $ flatten mx
-        n = rows mx
+zeroSlices :: Maybe (Matrix Double) -> [(Slice,Int)]
+zeroSlices Nothing = []
+zeroSlices mx 
+	| nextZero == Nothing = []
+	| otherwise = minimumBy (compare `on` length) [(Row, j):rowsDropped, (Column, i):columnsDropped]
+	where	nextZero = nextZeroIndex $ fromJust mx
+		rowsDropped = zeroSlices $ dropSlice mx Row j
+		columnsDropped = zeroSlices $ dropSlice mx Column i
+		j = fst index
+		i = snd index
+		index = fromJust nextZero
 {% endhighlight %}
 
-A Slice is a simple type that represents a matrix row or column
+The zeroSlices procedure returns a list of the least number of slices required to cross all the zeros out of the matrix. If the matrix argument is empty, or contains no zeroes, it returns an empty list. Otherwise, it finds the next zero in the matrix, creates two submatrices with the zero removed (one by removing the column and one by removing the row), and calls itself for each submatrix. The diagram below illustrates the first few calls.
+
 {% highlight haskell %}
-data Slice = Row | Column
+ghci> let cost = costMatrix([1,-5,3],[-2,1,4])
+ghci> zeroSlices $ Just $ subtractMinRow cost
+[]
 {% endhighlight %}
 
-Create a new matrix by dropping a row or column
-{% highlight haskell %}
-dropSlice :: Matrix Double -> Slice -> Int -> Matrix Double
-dropSlice mx Column i 
-	| i == 0 = dropColumns 1 mx
-	| i == (cols mx) - 1 = takeColumns i mx
-	| otherwise = fromBlocks [[takeColumns i mx, dropColumns (i+1) mx]]
-dropSlice mx Row i 
-	| i == 0 = dropRows 1 mx
-	| i == (rows mx) - 1 = takeRows i mx
-	| otherwise = fromBlocks [[takeRows i mx],[dropRows (i+1) mx]]
-{% endhighlight %}
-
-We can now evaluate a cost matrix as follows
-
-Determine if a cost matrix is solved
-{% highlight haskell %}
-zeroSlices :: Matrix Double 
-zeroSlices mx = 
-  | nextZero == Nothing = []
-  | otherwise = minimumBy (compare `on` length) [rowIndex:rowDropped,columnIndex:columnDropped]
-  where nextZero = nextZeroIndex mx
-        rowDropped = zeroSlices (dropSlice mx rowIndex )
-        columnDropped = zeroSlices (dropSlice mx columnIndex)
-        rowIndex = Row $ fst nextZero
-        columnIndex = Column $ snd nextZero
-{% endhighlight %}
-
-The zeroSlices procedure returns a list of the least number of slices required to cross all the zeros out of the matrix. Recursive functions can be tricky to describe, the diagram below illustrates how it works.
-
-To establish this, I've decided to use a backtracking search, as such things are usually quite neat to write in functional languages. Wikipedia describes another approach. I'll write this search as a recursive function, so some termination criteria are needed.
-<ol>
-	<li>We cover all zeros using exactly N lines</li>
-	<li>We cover all zeros using the smallest possible number of lines</li>
-	<li>We exhaust all possibilities</li>
-</ol>
-The first step in the algorithm is to subtract from each row, the minimum value of that row. That leaves us with a zero in each row, but in this case the matrix is not solved as the zeroes in rows 1 and 3 lie in the same column.
+Clearly we need to do more work before we can solve this matrix, so now we move onto the algorithm proper. The first step subtract from each row, the minimum value of that row. That leaves us with a zero in each row.
 
 {% math %}
  \begin{pmatrix}
- 1 & 2 & 4 \\
- -5 & -10 & -20 \\
- 3 & 6 & 12
+ -2 & 10 & -6 \\
+ 1 & -5 & 3 \\
+ 4 & -20 & 12
  \end{pmatrix}
  \longrightarrow
  \begin{pmatrix}
- 0 & 1 & 3 \\
- 15 & 10 & 0 \\
- 0 & 3 & 9
+ 4 & 16 & 0 \\
+ 6 & 0 & 8 \\
+ 24 & 0 & 32
  \end{pmatrix}
 {% endmath %}
 
 {% highlight haskell %}
-subtractMin m = fromRows [v - min | v <- (toRows m), let min = minVec v ]
+ghci> let a = costMatrix([1,-5,3],[-2,1,4])
+ghci> subtractMinRow a 
+3><3
+[ 4.0,  16.0,  0.0,
+ 6.0, 0.0, 8.0,
+  24.0,  0.0, 32.0]
+{% endhighlight %}
+
+The function `subtractMinRow` looks like this:
+
+{% highlight haskell %}
+subtractMinRow m = fromRows [v - min | v <- (toRows m), let min = minVec v ]
     where minVec v = scalar . minimum $ toList v
 {% endhighlight %}
 
+We then check this new matrix for a solution
+
 {% highlight haskell %}
-ghci> subtractMin mx
-3><3
-[ 0.0,  1.0,  3.0,
- 15.0, 10.0, 0.0,
-  0.0,  3.0, 9.0]
-ghci> isSolved ( subtractMin mx )
-False
+ghci> let b = subtractMinRow a
+ghci> zeroSlices $ Just b
+[(Row,0),(Column,1)]
 {% endhighlight %}
 
-We then repeat the step but on the columns of the matrix.
+The result tells us we can eliminate all the zeroes in the matrix with two slices. This is not sufficient for a solution, so the next step is to repeat the above steps with the columns of the matrix.
 
 {% math %}
 \begin{pmatrix}
-0 & 1 & 3 \\
-15 & 10 & 0 \\
-0 & 3 & 9
+ 4 & 16 & 0 \\
+ 6 & 0 & 8 \\
+ 24 & 0 & 32
 \end{pmatrix}
 \longrightarrow
 \begin{pmatrix}
-0 & 0 & 3 \\
-15 & 9 & 0 \\
-0 & 2 & 9
+ 0 & 16 & 0 \\
+ 2 & 0 & 8 \\
+ 20 & 0 & 32
 \end{pmatrix}
 {% endmath %}
 
-In haskell this is done by simply performing the same step on the transposed matrix ( and transposing the result )
-
 {% highlight haskell %}
-ghci> trans . subtractMin . trans mx
-3><3
-[ 0.0,  0.0,  3.0,
- 15.0, 9.0, 0.0,
-  0.0,  2.0, 9.0]
-ghci> isSolved ( trans . subtractMin $ trans mx )
-False
+ghci> let c = trans $ subtractMinRow $ trans b 
+ghci> zeroSlices $ Just b
+[(Row,0),(Column,1)]
 {% endhighlight %}
 
-In actual fact, the first step in implementing this algorithm is determining when it is solved. Looking at the graph, we need a minimum cost 'perfect matching'. Such an outcome is illustrated below. In terms of the matrix, we need a zero in each row such that none share the same column ( or, equivalently, a zero in each column so that none share the same row ). Easy to say, not so easy to actually do. While it's immediately obvious from the 3x3 matrix above that it is solved, it's not so obvious how to scale this up to, say, a matrix with 10,000 elements.
+Again, two slices are sufficient, but we need three for a valid solution.
 
-I've opted to do this using a backtracking search. At each step we find the zeros in the current row, and then eliminate the columns containing those zeros from the rest of the matrix and continue with the next row. The problem is solved if we can reach the end of the matrix without stopping. This kind of recursive algorithm is easy to express in a functional programming language like Haskell.
+The next step is to find the minimum value that is not covered by a slice. We can do this quite neatly with our list of slices and the fold function. `dropSlice` removes a slice from a matrix and has the following signature
 
 {% highlight haskell %}
-solution :: Matrix Double -> [Int]
-solution mx
-  | length sol == rows mx = sol
-  | otherwise = []
-  where sol = findZeros $ toLists mx
-
-findZeros :: ([[Double]],Int) -> [Int]
-findZeros  (_,-2) = []
-findZeros ((firstRow:rows),i) = i : maximumBy (compare `on` length) nextZeros
-  where nextZeros = map findZeros $ zip nextRows zeroIndices
-        nextRows = map row2col reducedColumns
-        reducedColumns = map (reduceColumn (zip (trans rows) [0..n])) zeroIndices
-        reduceColumn columns z = map fst $ filter (\(_,k)-> k /= z) columns
-        n = length rows
-        zeroIndices = zeroElements firstRow
+dropSlice :: Maybe (Matrix Double) -> (Slice, Int) -> Maybe (Matrix Double)
 {% endhighlight %}
-<h2>An Image Analysis Application</h2>
-Real world applications of the linear assignment problem are not hard to find, but here's one from image analysis. Say we're presented with a labeled diagram, as below. The diagram has already been segmented into its component parts ( there are various ways of doing this, but in the example below a simple unsupervised classifier such as k-means, based on colour information, would work well ). Next the goal is to associate each component with its label.
+
+So the following `foldl` call will reduce the matrix to just the elements not covered by a slice
+
+{% highlight haskell %}
+ghci> foldl dropSlice (Just c) [(Row,0),(Column,1)]
+Just (2><2)
+ [  2.0,  8.0
+ , 20.0, 32.0 ]
+{% endhighlight %}
+
+The minimum uncovered value here is 2. We then add this value to the rows of the matrix not covered by a slice. To do this we construct a new matrix with the appropriate elements and perform a matrix addition
+
