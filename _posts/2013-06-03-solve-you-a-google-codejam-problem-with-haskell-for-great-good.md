@@ -2,7 +2,7 @@
 layout: post
 title: Solve You a Google Codejam Problem with Haskell for Great Good*
 tags: [Coding, Maths]
-published: true
+published: false
 ---
 Every year Google runs a [CodeJam competition](http://code.google.com/codejam/ "Google CodeJam") for programmers with a competitive streak. There are several rounds, with the problems in each round usually being based on classic computer science problems, such as graph traversal or combinatorial optimization, with just enough variation thrown in to force you to think for yourself ( and presumably to make it tricky to use a prepackaged library function that can do it in one line of code ). Since on my list of things to do this year was to learn Haskell, I decided to use [one of the previous contests](http://code.google.com/codejam/contest/32016/dashboard#s=p0 "Google CodeJame 2008, Round 1") to make use of the language and to explore some algorithms.
 
@@ -77,6 +77,10 @@ ghci> let cost = costMatrix([1,-5,3],[-2,1,4])
 ghci> zeroSlices $ Just $ subtractMinRow cost
 []
 {% endhighlight %}
+
+Although the recursive approach is convenient, the position of each zero in the returned list is relative, as each recursive invocation 'sees' a different matrix. We need a further routine to modify the list so that we can use it.
+
+Adjusting the indices in this way is an {% m O(n^2) %} operation, an obvious 'code smell' indicative of a poor choice of data structure for this particular method. What we really want is a numpy-style 'masked array', which would allow us to operate on a reduced matrix without affecting the indices. At the time of writing no such data structure exists for Haskell, which would certainly be something worth revisiting at a later stage.
 
 Clearly we need to do more work before we can solve this matrix, so now we move onto the algorithm proper. The first step subtract from each row, the minimum value of that row. That leaves us with a zero in each row.
 

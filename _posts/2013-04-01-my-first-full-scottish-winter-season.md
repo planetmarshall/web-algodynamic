@@ -1,6 +1,7 @@
 ---
 layout: post
 title: My First Full Scottish Winter Season
+album_id: 5837889864696248273
 tags: [Climbing]
 published: true
 ---
@@ -12,7 +13,7 @@ Probably one of the best ways to get out into the mountains as much as possible 
 
 The A'Chioch Ridge (II,***)
 ---------------------------
-After a couple of days on some lower grade objectives, the plan was for a route on Beinn Bhan - the <a title="Cold Climbs by Ken Wilson" href="http://www.amazon.co.uk/Cold-Climbs-Great-British-Yourself/dp/0906371163" target="_blank">Cold Climbs</a> classic 'March Hare's Gully' (IV,4,***), but the initial steep ice pitch was to prove a bit much too soon, and remains something I hope to return to now that I've had more practice. The consolation prize was a traverse of the A'Chioch ridge. Not technically difficult, but stunning scenery along the entire route.
+{% gimg 5837890296907301554 right %}After a couple of days on some lower grade objectives, the plan was for a route on Beinn Bhan - the <a title="Cold Climbs by Ken Wilson" href="http://www.amazon.co.uk/Cold-Climbs-Great-British-Yourself/dp/0906371163" target="_blank">Cold Climbs</a> classic 'March Hare's Gully' (IV,4,***), but the initial steep ice pitch was to prove a bit much too soon, and remains something I hope to return to now that I've had more practice. The consolation prize was a traverse of the A'Chioch ridge. Not technically difficult, but stunning scenery along the entire route.
 
 Turquoise Gully (III,*)
 ------------------------
@@ -26,7 +27,7 @@ Postscript – Victor’s car had some difficulty escaping from the top car park
 
 The Curtain (IV,5,***)
 ----------------------
-On the inside page of the current SMC Winter Climbs guidebook, there's a picture of a climber on a steeply inclined icefall with the Ben Nevis cliffs in the background. This is 'The Curtain', and it is spectacular. This would be my first Grade IV ice climb since my failing at Beinn Bhan, and was in fact a degree harder in technical difficulty. There were to be no problems here, however – the ice was solid and had seen so much traffic that it often felt like a ladder to the top. Two excellent pitches finishing on Ledge Route above made the perfect introduction to ice climbing on Ben Nevis.
+{% gimg 5845556309132422722 left %}On the inside page of the current SMC Winter Climbs guidebook, there's a picture of a climber on a steeply inclined icefall with the Ben Nevis cliffs in the background. This is 'The Curtain', and it is spectacular. This would be my first Grade IV ice climb since my failing at Beinn Bhan, and was in fact a degree harder in technical difficulty. There were to be no problems here, however – the ice was solid and had seen so much traffic that it often felt like a ladder to the top. Two excellent pitches finishing on Ledge Route above made the perfect introduction to ice climbing on Ben Nevis.
 
 Point Five Gully (V,5,****)
 ---------------------------
@@ -40,6 +41,7 @@ With a change in the weather we went for the lower lying Beinn Udlaidh, a great 
 
 Raeburn's Route (IV,4,***)
 --------------------------
+{% gimg 5845558746112262994 right %}
 Harold Raeburn was a prolific climber, and so there are a plethora of routes that bear his name. Confusingly, there are two on Stob Corrie Nan Lochan. Known as 'Raeburn's Route' in the SMC guide, this is also known as 'Raeburn's Ordinary Route', not to be confused with 'Ordinary Route' on the same crag. With ice climbing being the theme for the week so far, I was keen to try some mixed climbing. I found myself to be far more comfortable with this style of climbing than with pure ice, but nonetheless I was to take a fall near the top of the route. I console myself that I had gone the wrong way and had taken a harder technical variation than was standard.
 
 George (III,4,**)
