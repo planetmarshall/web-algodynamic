@@ -3,6 +3,10 @@ markdown : redcarpet
 pygments: true
 headers : 
  - 
+    img : aonach_eagach.jpg
+    title : The Aonach Eagach, Glencoe, Scotland
+    caption : Climber on the Aonach Eagach ridge during one of the snowiest winters of recent times. January 2014
+ - 
     img : dione_view.jpg
     title : Dione, Tantalus Range, British Columbia
     caption : The view from the summit of Dione. June 2012
@@ -14,11 +18,11 @@ headers :
     img : cormac_serratus.jpg
     title : Serratus, Tantalus Range, British Columbia
     caption : Cormac Flynn on the summit of Serratus. June 2012
- - 
-    img : toll_an_lochain.jpg
-    title : Toll an Lochain, An Teallach, Scotland
-    caption : Toll an Lochain during a particularly wintry Easter. April 2013
  -
     img : traprain.jpg
     title : Traprain Law, Midlothian, Scotland
     caption : Climbers on Traprain Law late one Summer evening. July 2013
+ -
+    img : pointe_lachenal.jpg
+    title : Pointe Lachenal and the Triangle du Tacul. Chamonix, France
+    caption : My first climbing in the Alps, July 2013
