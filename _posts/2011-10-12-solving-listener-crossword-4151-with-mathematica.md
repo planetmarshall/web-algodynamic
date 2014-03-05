@@ -1,8 +1,8 @@
 ---
-layout: math_post
+layout: post
 title: Solving Listener Crossword 4151 with Mathematica
 tags: [Maths, Coding]
-published: true
+published: false
 ---
 <a href="http://mathsjam.com/" target="_blank" title="MathsJam">MathsJam </a>is a monthly meeting for people interested in recreational mathematics, and drinking of beer. At the <a href="http://mathsjam.com/index.php?content=edinburgh" title="MathsJam Edinburgh" target="_blank">Edinburgh meeting</a> in August, we were presented with this <a href="http://www.listenercrossword.com/" title="The Listener Crossword" target="_blank">Listener Crossword</a>, from <a href="https://www.crosswordclub.co.uk/" title="The Times Crossword Club" target="_blank">The Times Crossword Club</a>. At the time of writing, there are plenty of solutions on the web from those who tackled the puzzle in the traditional manner of brain, pen and paper. I opted to cheat. 
 
