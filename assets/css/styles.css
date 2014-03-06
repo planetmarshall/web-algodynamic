@@ -5,12 +5,22 @@ h1, h2, h3, h4 {
 p {
   font-family: "Open Sans", sans-serif; }
 
+blockquote {
+  font-style: italic;
+  font-size: smaller;
+  color: #888; }
+
 /* Recent posts */
 .recent-posts ul {
   list-style-type: none; }
 
 .navbar {
   border-radius: 0; }
+
+.social > li > a {
+  padding-right: 2px;
+  padding-bottom: 0;
+  padding-top: 10px; }
 
 /* Bootstrap Carousel styles */
 .carousel .item {

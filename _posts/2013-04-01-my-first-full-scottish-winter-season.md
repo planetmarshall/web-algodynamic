@@ -41,8 +41,7 @@ With a change in the weather we went for the lower lying Beinn Udlaidh, a great 
 
 Raeburn's Route (IV,4,***)
 --------------------------
-{% gimg 5845558746112262994 right %}
-Harold Raeburn was a prolific climber, and so there are a plethora of routes that bear his name. Confusingly, there are two on Stob Corrie Nan Lochan. Known as 'Raeburn's Route' in the SMC guide, this is also known as 'Raeburn's Ordinary Route', not to be confused with 'Ordinary Route' on the same crag. With ice climbing being the theme for the week so far, I was keen to try some mixed climbing. I found myself to be far more comfortable with this style of climbing than with pure ice, but nonetheless I was to take a fall near the top of the route. I console myself that I had gone the wrong way and had taken a harder technical variation than was standard.
+{% gimg 5845558746112262994 right %}Harold Raeburn was a prolific climber, and so there are a plethora of routes that bear his name. Confusingly, there are two on Stob Corrie Nan Lochan. Known as 'Raeburn's Route' in the SMC guide, this is also known as 'Raeburn's Ordinary Route', not to be confused with 'Ordinary Route' on the same crag. With ice climbing being the theme for the week so far, I was keen to try some mixed climbing. I found myself to be far more comfortable with this style of climbing than with pure ice, but nonetheless I was to take a fall near the top of the route. I console myself that I had gone the wrong way and had taken a harder technical variation than was standard.
 
 George (III,4,**)
 -----------------
