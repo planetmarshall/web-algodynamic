@@ -3,6 +3,18 @@
 $title-font: Raleway; 
 $main-font: 'Open Sans';
 
+@media(min-width:992px) {
+	.container {
+		width: 988px;
+	}
+}
+@media(min-width:1200px) {
+	.container {
+		width: 988px;
+	}
+}
+
+
 h1, h2, h3, h4 {
 	font: {
 		family: $title-font, sans-serif;
@@ -17,8 +29,9 @@ p {
 
 blockquote {
 	font-style: italic;
-	font-size: smaller;
-	color: #888;
+	font-size: small;
+	color: #920000;
+	border-left: 5px solid #C78D8D;
 }
 
 /* Recent posts */
@@ -63,7 +76,8 @@ blockquote {
 }
 
 @mixin meta {
-	border-bottom: 1px solid #eee;
+	border-bottom: 1px solid #BDBDBD;
+	margin-bottom: 1em;
 }
 
 .page-meta {

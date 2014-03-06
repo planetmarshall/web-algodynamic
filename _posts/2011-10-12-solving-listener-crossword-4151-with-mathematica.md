@@ -3,6 +3,7 @@ layout: post
 title: Solving Listener Crossword 4151 with Mathematica
 tags: [Maths, Coding]
 published: true
+album_id: 5987694595223331473
 ---
 <a href="http://mathsjam.com/" target="_blank" title="MathsJam">MathsJam </a>is a monthly meeting for people interested in recreational mathematics, and drinking of beer. At the <a href="http://mathsjam.com/index.php?content=edinburgh" title="MathsJam Edinburgh" target="_blank">Edinburgh meeting</a> in August, we were presented with this <a href="http://www.listenercrossword.com/" title="The Listener Crossword" target="_blank">Listener Crossword</a>, from <a href="https://www.crosswordclub.co.uk/" title="The Times Crossword Club" target="_blank">The Times Crossword Club</a>. At the time of writing, there are plenty of solutions on the web from those who tackled the puzzle in the traditional manner of brain, pen and paper. I opted to cheat. 
 
@@ -91,7 +92,7 @@ Out[10] = {'TTTT', 'TFFT', 'TTTT', 'TFFT'}
 
 Note the duplicates. This is because {% m B I = I B %}, but we cannot eliminate them because the rules used to produce them are different, and so will lead to different partial solutions. By applying the constraints systematically, we have reduced the number of potential solutions for 21 Across from 90 to just 4.
 
-[singlepic id=178 float=left w=256]We then repeat this process in a recursive manner, using one of the valid solutions to 21 across, and the rules that  were used to generate it, to examine the next clue. We continue in this fashion until either the crossword is filled, or we reach a dead end ( which is more likely ). If we reach a dead end, we backtrack ( hence the name ) to one of the possibilities we haven't tried yet. 
+{% gimg 5987694599140124530 left %}We then repeat this process in a recursive manner, using one of the valid solutions to 21 across, and the rules that  were used to generate it, to examine the next clue. We continue in this fashion until either the crossword is filled, or we reach a dead end ( which is more likely ). If we reach a dead end, we backtrack ( hence the name ) to one of the possibilities we haven't tried yet. 
 
 Why is this approach any more efficient than the brute force enumeration described above? The key is the generation of partial solutions in a tree like fashion, and the ability to eliminate them when we know that they could not possibly form part of a full solution. When we eliminate such a partial solution because it didn't satisfy the constraints, we eliminate all the possible solutions leading from that branch. For example, when we eliminated the rule {% m A=2 %} because it produced a solution to 19 Down that was too short, it eliminates not just one solution but all {% m 9!\times 2^{27}=48,704,929,136,640 %} solutions incorporating that rule. Not bad for a single calculation.
 
@@ -140,7 +141,7 @@ Out[1]={...,{20, 'FE'}, {21, 'TTTT'}, {23, 'FZFO'},...}
 {% endraw %}
 {% endhighlight %}
 
-[singlepic id=179 w=256 float=left] On my dual core netbook ( A 2010 Alienware M11xR2 ), this took just over 2 seconds to find a solution.
+On my dual core netbook ( A 2010 Alienware M11xR2 ), this took just over 2 seconds to find a solution.
 
 For the second puzzle, we alter the pattern to specify that the first letter of 21 Across ( and last of 9 Down ) can be any letter <em>except</em> 'T', using the regular expression <code>"[^T]..."</code>. In the code snippets, I have abbreviated the output somewhat. See the attached Mathematica notebook file for full details.
 
@@ -151,7 +152,7 @@ Out[2]={...,{20, 'EE'}, {21, 'FFTT'}, {23, 'FZFO'},...}
 {% endraw %}
 {% endhighlight %}
 
-[singlepic id=180 w=256 float=right] Finally, the last part of the puzzle is to complete the following task:
+{% gimg 5987694600693317586 right %}Finally, the last part of the puzzle is to complete the following task:
 
 <blockquote>"Solvers must identify the English transcriptions of the answers entered using German in one of the grids, which, in clue order, form two words of equal length that are to be entered below the grids, one on each side of the colon; this will relate to a claim made above."
 </blockquote>
@@ -176,4 +177,4 @@ Out[3]={{10, 'SF'}, {11, 'NF'}, {13, 'FOO'}, {16, 'TNOTE'}, {25, 'NON'}, {29,
 
 Having identified those clues, we reevaluate the expressions this time using the English rules. There are 4 clues that are the same in both German and English, but it is pretty clear that the required words are "<strong>Footnote</strong>" and "<strong>Nonsense</strong>"
 <h2>Download</h2>
-<a name="Download"/><a href="http://www.planetmarshall.co.uk/code/xword/xword.nb" title="Mathematica Notebook" target="_blank">Mathematica Notebook (111K)</a>
+<a name="Download"/><a href="https://github.com/planetmarshall/crossword_solve" title="Mathematica Notebook" target="_blank">Code on Github</a>
