@@ -20,6 +20,8 @@ blockquote {
 /* Recent posts */
 .recent-posts ul {
   list-style-type: none; }
+  .recent-posts ul li {
+    clear: both; }
 
 .navbar {
   border-radius: 0; }

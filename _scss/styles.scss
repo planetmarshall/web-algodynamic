@@ -2,6 +2,14 @@
 
 $title-font: Raleway; 
 $main-font: 'Open Sans';
+@media (max-width:767px){
+	.carousel-caption {
+		visibility: hidden;
+	}
+	.carousel-indicators {
+		visibility: hidden;
+	}
+}
 
 @media(min-width:992px) {
 	.container {
@@ -39,8 +47,10 @@ blockquote {
 .recent-posts {
 	ul {
 		list-style-type: none;
+		li {
+			clear: both;
+		}
 	}
-
 }
 
 .navbar {
