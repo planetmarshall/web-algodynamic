@@ -27,6 +27,8 @@ h1, h2, h3, h4 {
 	font: {
 		family: $title-font, sans-serif;
 	}
+
+	clear: both;
 }
 
 p {
@@ -72,6 +74,10 @@ blockquote {
 	.item {
 		left: 0 !important;
 		transition: opacity 1.0s;
+		-webkit-transition: opacity 1.0s;
+		-moz-transition: opacity 1.0s;
+		-ms-transition: opacity 1.0s;
+		-o-transition: opacity 1.0s;
 	}
 
 	.active.left, .active.right {

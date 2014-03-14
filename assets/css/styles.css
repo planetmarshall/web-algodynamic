@@ -1,4 +1,10 @@
 /* styles.scss */
+@media (max-width: 767px) {
+  .carousel-caption {
+    visibility: hidden; }
+
+  .carousel-indicators {
+    visibility: hidden; } }
 @media (min-width: 992px) {
   .container {
     width: 988px; } }
@@ -6,7 +12,8 @@
   .container {
     width: 988px; } }
 h1, h2, h3, h4 {
-  font-family: Raleway, sans-serif; }
+  font-family: Raleway, sans-serif;
+  clear: both; }
 
 p {
   font-family: "Open Sans", sans-serif; }
@@ -34,7 +41,11 @@ blockquote {
 /* Bootstrap Carousel styles */
 .carousel .item {
   left: 0 !important;
-  transition: opacity 1.0s; }
+  transition: opacity 1.0s;
+  -webkit-transition: opacity 1.0s;
+  -moz-transition: opacity 1.0s;
+  -ms-transition: opacity 1.0s;
+  -o-transition: opacity 1.0s; }
 .carousel .active.left, .carousel .active.right {
   opacity: 0;
   z-index: 2; }

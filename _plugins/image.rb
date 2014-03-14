@@ -3,7 +3,8 @@ require 'picasa'
 
 FlickRaw.api_key="8d77c8e15549563b6f81192232ae0337"
 FlickRaw.shared_secret="1e27464717d13cff"
-
+FlickRaw.proxy = "http://edibloxx.local.tmvse.com:8080"
+https_proxy = "http://edibloxx.local.tmvse.com:8080"
 
 module Jekyll
 	class ImageTag < Liquid::Tag

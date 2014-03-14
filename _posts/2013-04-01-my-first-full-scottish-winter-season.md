@@ -6,6 +6,7 @@ tags: [Climbing]
 published: true
 ---
 {% img 8651836059 left %}As I write this, the Scottish winter is not just hanging in there, it's colder now than it was in any of the Winter months and it's likely I could yet get some more winter routes in the bag before the season is over, however I wanted to write this up while the memories were still fresh.
+<!--more-->
 
 A couple of caveats - I've been in the Scottish Hills in Winter before, and as is often said there's no such thing as Scottish Winter Hillwalking, only Mountaineering. That said, prior to this Winter my only experience of Scottish Winter Climbing was being guided up the Grade II North Gully on Ben Nevis at the end of a particularly foul week, weatherwise, in February 2012. So this is pretty much my first full season of Scottish Winter Climbing.
 

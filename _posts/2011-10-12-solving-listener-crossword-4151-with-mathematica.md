@@ -6,6 +6,7 @@ published: true
 album_id: 5987694595223331473
 ---
 <a href="http://mathsjam.com/" target="_blank" title="MathsJam">MathsJam </a>is a monthly meeting for people interested in recreational mathematics, and drinking of beer. At the <a href="http://mathsjam.com/index.php?content=edinburgh" title="MathsJam Edinburgh" target="_blank">Edinburgh meeting</a> in August, we were presented with this <a href="http://www.listenercrossword.com/" title="The Listener Crossword" target="_blank">Listener Crossword</a>, from <a href="https://www.crosswordclub.co.uk/" title="The Times Crossword Club" target="_blank">The Times Crossword Club</a>. At the time of writing, there are plenty of solutions on the web from those who tackled the puzzle in the traditional manner of brain, pen and paper. I opted to cheat. 
+<!--more-->
 
 The description of the puzzle itself is quite complex, but in a nutshell the task is to substitute each of the given letters for one of the first ten prime numbers ( with no duplication ). The expression for each clue will then give a numerical solution. Substitute each digit in the solution with the first letter of its name and write the result in the crossword. There are two ways of substituting digits for letters, either in English or in German, but a solution to a given clue must be consistently one language or the other.
 

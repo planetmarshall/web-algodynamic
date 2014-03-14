@@ -1,6 +1,7 @@
 url: localhost:4000/index.html
-markdown : redcarpet
+markdown : kramdown
 pygments: true
+excerpt_separator: <!--more-->
 headers : 
  - 
     img : aonach_eagach.jpg

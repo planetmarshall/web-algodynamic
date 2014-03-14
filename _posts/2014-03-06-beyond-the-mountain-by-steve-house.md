@@ -5,6 +5,7 @@ tags: [Climbing]
 published: true
 ---
 Today is [World Book Day](http://www.worldbookday.com), so I've decided to write a review of a book I read recently, [Steve House's](http://www.stevehouse.net/) "Beyond the Mountain" - winner of the [Boardman Tasker Prize](http://www.boardmantasker.com) for Mountain Literature in 2009. 
+<!--more-->
 
 > &ldquo;I will succeed because I must. Their slings and arrows are excuses for their failure to be brave enough, their failure to believe in themselves, their failure to commit to an unmapped future.&rdquo;
 
