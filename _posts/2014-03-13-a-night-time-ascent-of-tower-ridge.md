@@ -29,7 +29,7 @@ With the trip underway, four of us gathered by the CIC hut at 1:00 am on Sunday 
 
 {% img 13133261804 left %}There were no changes at Tower Gap, however. Crossing the narrow snow walkway with a precipitous drop to either side followed by gingerly lowering yourself into the void was as heartstopping as I remember it. I hope to never do this climb so many times that this part becomes routine - though next time maybe I'll let my partner take the lead. Tim and I safely across the gap, we roped up again for the final snow climb up to the summit where we were greeted by the familiar exfoliating wind of the Ben Nevis summit plateau.
 
-At this point, after all, a climber is the only obstacle to the jet stream between Newfoundland and Norway.
+{% img 13174420623 right %}At this point, after all, a climber is the only obstacle to the jet stream between Newfoundland and Norway.
 
 
 

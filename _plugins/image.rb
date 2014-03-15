@@ -1,10 +1,11 @@
 require 'flickraw'
 require 'picasa'
+require 'htmlentities'
 
 FlickRaw.api_key="8d77c8e15549563b6f81192232ae0337"
 FlickRaw.shared_secret="1e27464717d13cff"
-FlickRaw.proxy = "http://edibloxx.local.tmvse.com:8080"
-https_proxy = "http://edibloxx.local.tmvse.com:8080"
+#FlickRaw.proxy = "http://edibloxx.local.tmvse.com:8080"
+#https_proxy = "http://edibloxx.local.tmvse.com:8080"
 
 module Jekyll
 	class ImageTag < Liquid::Tag
@@ -20,8 +21,9 @@ module Jekyll
 		def render(context)
 			thumbnail_url=FlickRaw.url_q(@info)
 			image_url=FlickRaw.url_b(@info)
+			description=HTMLEntities.new.encode(@info.description)
 
-			"<div class=\"thumbnail-#{@float}\"><a href=\"#{image_url}\" data-lightbox=\"#{@id}\"><img src=\"#{thumbnail_url}\"/></a></div>"
+			"<div class=\"thumbnail-#{@float}\"><a href=\"#{image_url}\" data-lightbox=\"#{@id}\" title=\"#{description}\"><img src=\"#{thumbnail_url}\"/></a></div>"
 		end
 	end
 
@@ -39,11 +41,11 @@ module Jekyll
 			album_id = context.environments.first["page"]["album_id"].to_s
 			photos = @client.album.show(album_id).entries
 			photo = photos.find { |photo| photo.id == @photo_id }
-			description = photo.media.description
+			description = HTMLEntities.new.encode(photo.media.description)
 			thumbnail=photo.media.thumbnails[2]
 			image_url=photo.content.src
 
-			"<div class=\"thumbnail-#{@float}\"><a href=\"#{image_url}\" data-lightbox=\"#{@photo_id}\"><img src=\"#{thumbnail.url}\" width=\"#{thumbnail.width}\" height=\"#{thumbnail.height}\" alt=\"#{description}\"/></a></div>"
+			"<div class=\"thumbnail-#{@float}\"><a href=\"#{image_url}\" data-lightbox=\"#{@photo_id}\" title=\"#{description}\"><img src=\"#{thumbnail.url}\" width=\"#{thumbnail.width}\" height=\"#{thumbnail.height}\" alt=\"#{description}\"/></a></div>"
 		end
 	end
 end
