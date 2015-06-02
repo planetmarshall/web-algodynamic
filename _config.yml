@@ -1,5 +1,5 @@
 url: localhost:4000/index.html
-pygments: true
+highlighter: true
 markdown: kramdown
 excerpt_separator: <!--more-->
 headers : 

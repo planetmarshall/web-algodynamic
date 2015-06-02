@@ -19,7 +19,7 @@ p {
   font-family: "Open Sans", sans-serif; }
 
 blockquote {
-  font-style: italic;
+  font-style: 'Waiting for the Sunrise', cursive;
   font-size: small;
   color: #920000;
   border-left: 5px solid #C78D8D; }
@@ -108,3 +108,5 @@ pre {
     border: 1px solid #428bca; }
     .thumbnail-right img:hover {
       border: 1px solid #2a6496; }
+
+/*# sourceMappingURL=styles.css.map */

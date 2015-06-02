@@ -1,5 +1,4 @@
 require 'flickraw'
-require 'picasa'
 require 'htmlentities'
 
 FlickRaw.api_key="8d77c8e15549563b6f81192232ae0337"
@@ -26,11 +25,12 @@ module Jekyll
 			"<div class=\"thumbnail-#{@float}\"><a href=\"#{image_url}\" data-lightbox=\"#{@id}\" title=\"#{description}\"><img src=\"#{thumbnail_url}\"/></a></div>"
 		end
 	end
+			
+	Thumbnail= Struct.new(:url,:width,:height)
 
 	class GImageTag < Liquid::Tag
 		def initialize( tag_name, text, tokens )
 			super
-			@client = Picasa::Client.new(user_id: "planetmarshalluk@gmail.com", password: "2oidBerg")
 
 			params = text.split
 			@float = params[1]
@@ -38,12 +38,9 @@ module Jekyll
 		end
 
 		def render(context)
-			album_id = context.environments.first["page"]["album_id"].to_s
-			photos = @client.album.show(album_id).entries
-			photo = photos.find { |photo| photo.id == @photo_id }
-			description = HTMLEntities.new.encode(photo.media.description)
-			thumbnail=photo.media.thumbnails[2]
-			image_url=photo.content.src
+			description = "dummy"
+			thumbnail = Thumbnail.new("empty.png",64,64)
+			image_url="empty.png"
 
 			"<div class=\"thumbnail-#{@float}\"><a href=\"#{image_url}\" data-lightbox=\"#{@photo_id}\" title=\"#{description}\"><img src=\"#{thumbnail.url}\" width=\"#{thumbnail.width}\" height=\"#{thumbnail.height}\" alt=\"#{description}\"/></a></div>"
 		end
