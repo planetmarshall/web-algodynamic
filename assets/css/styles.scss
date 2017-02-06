@@ -1,3 +1,5 @@
+---
+---
 /* styles.scss */
 @media (max-width: 767px) {
   .carousel-caption {
@@ -110,3 +112,29 @@ pre {
       border: 1px solid #2a6496; }
 
 /*# sourceMappingURL=styles.css.map */
+
+/* d3 chart styles */
+
+.svg_container {
+  background-color: #272822;
+}
+
+.bar {
+  fill: steelblue;
+}
+
+.bar:hover {
+  fill: brown;
+}
+
+.axis path {
+  stroke: #f8f8f2;
+}
+
+.axis line {
+  stroke: #f8f8f2;
+}
+
+.axis text {
+  fill: #f8f8f2;
+}
