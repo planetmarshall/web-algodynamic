@@ -33,7 +33,7 @@ quite easy to extract. The following function extracts all the logbook entries f
 a particular climb on UKC:
 
 
-{% highlight python %}
+```
 import pandas as pd
 from bs4 import BeautifulSoup
 
@@ -44,7 +44,7 @@ def extract_log(html):
                        columns=['name','date','style','notes'])
     dates = pd.to_datetime(log['date'], errors='coerce')
     return log[dates.notnull()]
-{% endhighlight %}
+```
 
 So we can get all the entries from, for example, [Fingers Ridge](http://www.ukclimbing.com/logbook/c.php?i=2361)
 , with the following Python code
@@ -70,7 +70,7 @@ Fingers Ridge is just one of many climbs at the popular Cairngorm crag,
 [Coire an t'Sneachda](http://www.ukclimbing.com/logbook/crag.php?id=25). A similar 
 function allows us to scrape the UKC crag page for information about each climb.
 
-{% highlight python %}
+```python
 def extract_crag_climbs(crag_html):
     crag_soup = BeautifulSoup(crag_html, 'html.parser')
     rows = crag_soup.find_all('tr', class_='climb')
@@ -81,7 +81,7 @@ def extract_crag_climbs(crag_html):
     winter_grades = ('I ','II ','III ','IV ','V ','VI ','VII ','VIII ','IX ','X ','XI ','XII ')
     climbs = climbs[climbs['grade'].str.startswith(winter_grades)]
     return climbs.set_index('climb_id').drop(['index'],axis=1)
-{% endhighlight %}
+```
 
 Which gives us a table like this:
 
@@ -111,47 +111,55 @@ As a starting point, we can look at the histogram of climbs logged by day of the
 Using the Pandas [TimeSeries](http://pandas.pydata.org/pandas-docs/stable/timeseries.html) methods, given
 the logged climbs by date we can easily get daily totals for a particular crag. 
 
-{% highlight python %}
+```python
 logged_climbs_in_sneachda = climbs_by_date[25]
 [logged_climbs_in_sneachda[climbs_by_date.index.dayofweek == i] for i in range(7)]
 
 Out: [1042, 997, 858, 1011, 1031, 2671, 2236]
-{% endhighlight %}
+```
 
 
 I've used the [d3](https://d3js.org/) library for JavaScript to generate the data visualizations.
 
 {% svg chart 1200 900 %}
 
-### Sampling Bias
+### A brief diversion into probability theory
 
-What we're interested in knowing is how Winter Climbing activity deviates from the average by month, and by season.
-As it stands, however, the UKC data has an inbuild sampling bias. Changes in the number of climbs logged on UKC could
-be caused by a number of factors, including but not limited to
+We can rephrase the question being asked, as
 
-* Variation in weather conditions meaning a route is not suitable for climbing
-* Changes in the number of users of UKC
-* Changes in the proportion of UKC users who make active use of the logbooks
+> Given the conditions on the day, how likely is it that a climb was logged at a given crag?
 
-As we're only interested in the first of these, we need to make some effort to remove the influence of the others.
-It is reasonable to assume that normal rock climbs, that is those that can be climbed year round, are not so susceptible
-to changes in the weather. This is particularly true of the gritstone outcrops of the Peak District, that are climbed 
-all year round and come into condition quickly after periods of poor weather. It is no coincidence that these are also
-some of the most popular climbs in the country, and so courtesy of the 
-[Law of Large Numbers](https://en.wikipedia.org/wiki/Law_of_large_numbers) are good candidates
-for statistical analysis.
+This is a question about probability, which we can express mathematically as ...
+
+However, this is a gross simplification, as the likelihood of a climb being logged depends on other factors, 
+such as how many UKC users there were at that time, etc...
+
+For example, we've already seen that climbs in certain areas are much more likely to be logged on a weekend. We
+handle this implicitly by averaging behaviour over the entire month, which is just another way of saying 'integrating
+out the variable', it's just not as mathematically rigorous.
+
+Since we're not interested in any of these other factors, but only in how climbs depend on weather conditions,
+we need to correct for them. Again, mathematically, this is handled by integrating those variables out of the 
+equation
+
+maths....
+
+W
+
+Fortunately, we're not that bothered about a robust treatment here. If we were interested in, say, calculating
+insurance risk or betting odds, we might take this kind of thing a bit more seriously.
 
 Creating the Maps
 -----------------
 
 For creating the maps I'm using the Shapefiles available from Natural Earth. 
 
-## Extracting the shapefiles
+### Extracting the shapefiles
 
 For drawing the maps we want two shapefiles, one vector format for drawing the geographic ouline of Scotland
 and its constituent islands, and one raster format for showing the topography.
 
-## Coordinate Transformation
+### Coordinate Transformation
 
 The Natural Earth shapefiles are provided in WGS84 Latitude and Longitude coordinates, typical of a GPS or Google Earth.
 However if we plot these coordinates directly, we get a rather squashed image - the result of trying to plot a spherical
@@ -163,13 +171,13 @@ the Ordnance Survey, based on the Mercator Projection but with an additional loc
 to convert WGS84 coordinates to OS National Grid from within Python (although the GeographicLib does...), but the OS
 provide an online utility.
 
-### Transforming the vector file
+#### Transforming the vector file
 
-### Transforming the raster file
+#### Transforming the raster file
 
 Transforming the raster file is rather more complex as it is defined in terms of pixels rather than WGS84 coordinates.
 
-## Colourization
+### Colourization
 
 
 [UKC] : https://www.ukclimbing.com
