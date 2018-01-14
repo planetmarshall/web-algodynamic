@@ -6,10 +6,12 @@ AUTHOR = 'Andrew Marshall'
 SITENAME = "Andrew Marshall's blog"
 SITEURL = ''
 
+PLUGIN_PATHS =['../pelican-plugins']
+PLUGINS = ['assets']
 PATH = 'content'
 
 TIMEZONE = 'Europe/London'
-
+THEME = 'themes/planetmarshall'
 DEFAULT_LANG = 'en'
 
 # Feed generation is usually not desired when developing
