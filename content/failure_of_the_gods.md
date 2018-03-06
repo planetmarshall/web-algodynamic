@@ -22,3 +22,6 @@ With the vernacular of the enthusiastic climbing youth, Calum looks up at the ne
 'psyched'. I am not psyched. I am fucking petrified.
 
 I try to remember the guidebook description. 
+
+I point the car South, and look at the mountains of the North West in the rear view mirror, knowing that soon I'll be
+back.
