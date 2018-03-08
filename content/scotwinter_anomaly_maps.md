@@ -16,17 +16,71 @@ across the UK. We have no equivalent for climbing activity, and short of camping
 the number of times it's climbed in a Winter season - not a pleasant prospect - we have to rely on public logbook data,
 the most exhaustive source of which in the UK by some margin is UKClimbing.
 
-## Getting a list of crags
+UKC does not provide a public API for accessing its data, however the website and its URLs are structured in such a way
+as to make scraping their HTML pages for data fairly straightforward. A logbook page has a URL of the following form : 
+`/logbook/c.php?i=<climb_id>`, and a crag URL looks like `/logbook/crag.php?id=<crag_id>`. The `climb_id` can be extracted
+from its parent crag page
 
-We can use UKC's crag map to get a list of candidate Winter Crags, but we can't do the entirety of Scotland in one
-request. The webpage limits the search radius to 150km and the number of results to 150,
-so we need to make a series of requests to make sure we get all the crags. One straightforward way to do this is to make
-one request per 100km Ordnance Survey Grid Square.
-
+In python-esque pseudo code, the process is roughly as follows:
 
 ```python
-import numpy as np
-np.ogrid
+for crag in winter_crags():
+    for climb in extract_winter_climbs(crag):
+        extract_logbook(climb)
+```
+
+UKC Provides a crag search facility which returns crag ids based on location. A single request looks like
+`/logbook/map/liveresults.php?g=1&loc=<latitude>%2C<longitude>&dist=<radius>&km=1&q=` 
+(I determined this by performing a search and looking at the network traffic using Google Chrome's developer tools)
+
+The result of this request is an html file that we can parse to get the infomration we need about that particular crag,
+for example, here is the fragment that describes Ben Nevis
+
+```html
+<div class="panel panel-success" style="cursor:pointer"
+     onclick="window.open('../crag.php?id=16877', 'crag16877')" onmouseover='showArrow(-5.004,56.797)'
+     onmouseout='hideArrow()' title="Click for full details">
+    <div class="panel-heading"><i class="icon-map-marker pull-right" title="Crag"></i>Ben Nevis</div>
+    <div class="panel-body small">Highland, SCOTLAND<br/><span
+            class="text-muted">384 climbs, Andesite</span><br/>39 km WNW
+    </div>
+</div>
+
+```
+
+Using the Python library BeautifulSoup, we can extract the information we need from the above fragment as follows
+```python
+def parse_crag_fragment(text):
+    pass
+```
+
+Attempting to get all the crags in Scotland using this method returns too many results, but we can perform
+a series of requests in a grid pattern using Ordinance Survey National Grid coordinates and accumulate the results:
+
+```python
+for north_grid in range(10):
+    northings = (north_grid + 0.5) * 100000
+    for east_grid in range(10):
+        eastings = (east_grid + 0.5) * 100000
+        lat, lon = national_grid_to_wgs84(eastings, northings)
+        #request_url = 
+```
+
+### A diversion into Asynchronous IO and Coroutines
+
+It's worth noting that there is the potential for the `winter_crags()` routine to spend a lot of time waiting for HTML
+requests, during which the CPU is idle. Coroutines are a new feature in Python 3.5 that make it easy to reschedule this 
+work so that idle time is used for processing other work rather than just waiting for HTML requests to return.
+
+```python
+
+async def get_crag_text(crag_id):
+    pass
+
+async def extract_crags_info(crag_id):
+    await get_crag_text(crag_id)
+    
+loop.gather(...)
 ```
 
 ### A brief diversion into Coordinate System conversions
