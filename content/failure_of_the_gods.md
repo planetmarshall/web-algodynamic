@@ -16,12 +16,29 @@ making moves I can only do with the confidence of the top rope.  I don't know if
 start to doubt if I can lead the second, before I've even seen it.
 
 Noise from below indicates Calum has started to lead behind me. It's a little too soon for my liking, and his proximity
-is pressure I could do without. It's his decision though, I have no control over the climbers below.
+is pressure I could do without. It's his decision though. In Winter the daylight hours are short, and I can't blame him
+for not wanting to risk a climb in darkness.
 
 With the vernacular of the enthusiastic climbing youth, Calum looks up at the next pitch and declares himself to be
 'psyched'. I am not psyched. I am fucking petrified.
 
 I try to remember the guidebook description. 
 
-I point the car South, and look at the mountains of the North West in the rear view mirror, knowing that soon I'll be
-back.
+As soon as my feet are back on the ground I feel a convulsion of relief. It feels like the right decision, and Susan agrees - 
+but almost immediately I know that I will be second guessing myself for days, my thoughts saturated with 'what ifs'. What if I had pushed on, making the harder choice, 
+not conquering but embracing my fear of the unknown, of uncertainty. Would I have been shortly celebrating
+leading what a friend has described as one of the best pitches in Scotland? Or would I have woken up in A&E, or worse, not woken up at all.
+
+Faced with some hard choices to make closer to home I often think back to that decision and yearn for the simplicity of a binary outcome. 
+Success or failure. Life or death. But what if, no matter whether I take the
+difficult or easy path, there may be no good outcome for me. The only measure of success is in the paths that other
+lives take,
+
+I'm not what you could call a spiritual person. My world is the world of mathematics and logic, where even chaos
+ and uncertainty follow the laws of nature. I believe in physics, not karma. While
+we are all the centre of our own pocket universe, the actual universe carries on regardless and is under no obligation to
+be fair to anyone. The sum of all human experience a flicker among the lifetime of stars.
+
+
+
+I point the car South, and look at the mountains of the North West in the rear view mirror, knowing I'll be back here again.
