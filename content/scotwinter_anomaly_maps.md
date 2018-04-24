@@ -33,7 +33,7 @@ UKC Provides a crag search facility which returns crag ids based on location. A 
 `/logbook/map/liveresults.php?g=1&loc=<latitude>%2C<longitude>&dist=<radius>&km=1&q=` 
 (I determined this by performing a search and looking at the network traffic using Google Chrome's developer tools)
 
-The result of this request is an html file that we can parse to get the infomration we need about that particular crag,
+The result of this request is an html file that we can parse to get the information we need about that particular crag,
 for example, here is the fragment that describes Ben Nevis
 
 ```html
@@ -63,7 +63,11 @@ for north_grid in range(10):
     for east_grid in range(10):
         eastings = (east_grid + 0.5) * 100000
         lat, lon = national_grid_to_wgs84(eastings, northings)
-        #request_url = 
+        first_page_request = ukc.create_crag_search_url(lat, lon, 50)
+        first_page = requests.get(first_page_request)
+        first_page_soup = BeautifulSoup(first_page.text)
+        meta = ukc.parse_crag_search_meta(first_page)
+        
 ```
 
 ### A diversion into Asynchronous IO and Coroutines
