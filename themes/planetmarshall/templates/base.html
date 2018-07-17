@@ -71,5 +71,10 @@
 </div>
 <script src="{{  SITEURL }}/{{THEME_STATIC_DIR}}/js/jquery-3.3.1.min.js"></script>
 <script src="{{  SITEURL }}/{{THEME_STATIC_DIR}}/js/bootstrap.bundle.min.js"></script>
+{% if page  %}
+    {% if page.script %}
+         <script src="{{ SITEURL }}/scripts/{{ page.script }}"></script>
+    {% endif %}
+{% endif %}
 </body>
 </html>

@@ -9,6 +9,8 @@ SITEURL = ''
 PLUGIN_PATHS =['../pelican-plugins']
 PLUGINS = ['assets']
 PATH = 'content'
+STATIC_PATHS = ['images', 'data', 'scripts']
+ASSET_CONFIG = [('BABEL_PRESETS', 'env')]
 
 TIMEZONE = 'Europe/London'
 THEME = 'themes/planetmarshall'
