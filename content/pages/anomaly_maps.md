@@ -1,5 +1,5 @@
 Title: Winter Climbing Anomaly Maps
-Script: maps.js
+Script: winter.js
 
 <style>
 

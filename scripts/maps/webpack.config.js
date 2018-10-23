@@ -3,9 +3,12 @@ const path = require('path');
 module.exports = {
     mode: 'development',
     devtool: "source-map",
-    entry: './src/index.js',
+    entry: {
+        winter: './src/winter.js',
+        e3_difficulty: './src/e3_difficulty.js'
+    },
     output: {
-        filename: 'maps.js',
+        filename: '[name].js',
         path: path.resolve(__dirname, '../../content/scripts')
     },
     module: {
