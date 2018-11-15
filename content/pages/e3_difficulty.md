@@ -1,5 +1,6 @@
 Title: Distribution of E3 Difficulty in the UK
 Script: e3_difficulty.js
+opengraph_image: e3_preview.png
 
 <style>
 
@@ -13,13 +14,23 @@ Script: e3_difficulty.js
   stroke-linejoin: round;
 }
 
-.hexagon {
-  fill: steelblue;
-  stroke: black;
-  stroke-width: 1000;
-}
+.e3-contour {
+ stroke: none;
+ stroke-linejoin: round;
+ stroke-width: 1000;
+      }
+      
+ .e3-tooltip {
+ backround-color: white;
+ color: black;
+ }
 
 </style>
+<div class="row">
+<div class="col">
+<p>Data from <a href="https://www.ukclimbing.com/" target="_new">UKClimbing</a></p>
+</div>
+</div>
 <div class="row">
 <div class="col">
 
@@ -40,9 +51,10 @@ Script: e3_difficulty.js
     <a class="dropdown-item" href="#">6c</a>
   </div>
 </div>
-</div>
-<div class="col">
 
+</div>
+
+<div class="col">
 <div class="dropdown">
   <button class="btn btn-info dropdown-toggle" 
   type="button" id="uk_2_dropdown" data-toggle="dropdown" 
@@ -61,7 +73,7 @@ Script: e3_difficulty.js
 </div>
 
 </div>
-<div>
+
 <div class="row">
 <div class="col" id="map_1"></div>
 <div class="col" id="map_2"></div>

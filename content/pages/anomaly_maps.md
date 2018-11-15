@@ -1,5 +1,8 @@
 Title: Winter Climbing Anomaly Maps
 Script: winter.js
+Status: hidden
+
+
 
 <style>
 
