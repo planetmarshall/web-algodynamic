@@ -1,6 +1,6 @@
-title: The Failure of the Gods.
-date: 2018-02-28
-Status: Hidden
+Title: The Failure of the Gods.
+Date: 2018-02-28
+Status: Draft
 
 The Scottish Winter season is in full swing, and I'm currently sitting in the Kinlochewe hotel bar browsing Instagram.
 The filtered successes of the Scottish Winter Climbing community. Mountains. Snow. Icefalls. Axes and Glory. I want to be among them. Having just finished

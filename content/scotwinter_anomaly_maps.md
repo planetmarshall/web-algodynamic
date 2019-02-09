@@ -1,6 +1,6 @@
 Title: Scottish Winter Anomaly Maps
 Date: 2017-12-05
-Status: Hidden
+Status: Draft
 
 As I write this, the first major snows of the Winter have arrived at my home in the Peak District. Already this year I've
 made the long pilgrimage to the Highlands of Scotland for the eagerly awaited first mixed climbs of the season; in contrast to last year

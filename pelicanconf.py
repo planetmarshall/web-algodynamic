@@ -6,7 +6,7 @@ AUTHOR = 'Andrew Marshall'
 SITENAME = "Andrew Marshall's blog"
 SITEURL = ''
 
-PLUGIN_PATHS =['../pelican-plugins']
+PLUGIN_PATHS =['../web/pelican-plugins']
 PLUGINS = ['assets']
 PATH = 'content'
 STATIC_PATHS = ['images', 'data', 'scripts']
