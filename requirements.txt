@@ -1,1 +1,4 @@
-pelican
+pelican[Markdown]
+Pygments
+webassets
+libsass
