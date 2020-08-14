@@ -43,13 +43,38 @@ variables is going to be cast, but I had to go to the [C++ Standard](https://git
  4. Otherwise, both get converted to the unsigned type of the same size as the signed type.
  
 
-Written out explicitly, our conditional expression becomes 
+Rule 2 applies here, so `max_vertices` gets converted to the type of `shape[i].size()`, which is a `uint64_t`. If we
+write this out explicitly, the conditional expression becomes:
 
     :::c++
     uint64_t left = shape[i].size();
     uint64_t right = static_cast<uint64_t>(max_vertices); // max_vertices = -1
     
-<button type="button" class="btn btn-run btn-sm" onclick="console.log(Module.dodgy_cast());">Run</button>
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  Demo
+</button>
+
+<!-- Modal -->
+<div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">WASM Demo <small>powered by emscripten</small></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="wasm-content">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-run" onclick="$('#wasm-content').text(Module.dodgy_cast());">Run</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 We can't represent `-1` with an unsigned integer, so C++ converts it to the signed integer with the same bit pattern,
  which in the case of `-1` is 2^64-1 or 1.844x10^19. In other words, 
