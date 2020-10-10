@@ -1,0 +1,1 @@
+from .wasm_demo import WasmDemoExtension
