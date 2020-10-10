@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*- #
 from __future__ import unicode_literals
 
+from wasm_demo import WasmDemoExtension
+
 AUTHOR = 'Andrew Marshall'
 SITENAME = 'algodynamic'
 SITESUBTITLE =  'C++, Python, Computer Vision and Machine Learning'
@@ -19,6 +21,16 @@ CATEGORY_FEED_ATOM = None
 TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
+
+MARKDOWN = {
+    'extensions': [WasmDemoExtension()],
+    'extension_configs': {
+        'markdown.extensions.codehilite': {'css_class': 'highlight'},
+        'markdown.extensions.extra': {},
+        'markdown.extensions.meta': {},
+    },
+    'output_format': 'html5',
+}
 
 # Blogroll
 LINKS = (('Pelican', 'http://getpelican.com/'),
