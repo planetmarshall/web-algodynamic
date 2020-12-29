@@ -5,7 +5,8 @@ from uuid import uuid4
 from markdown import Extension
 from markdown.blockprocessors import BlockProcessor
 
-def create_demo_dialog(parent : ET.Element):
+
+def create_demo_dialog(parent : ET.Element, function):
     dialog_id = f"dialog-{str(uuid4())[:8]}"
     button = ET.SubElement(
         parent,
@@ -38,7 +39,8 @@ def create_demo_dialog(parent : ET.Element):
     modal_output = ET.SubElement(modal_content, "pre", {"id": content_id, "class": "wasm-output"})
 
     modal_footer = ET.SubElement(modal_content, "div", {"class": "modal-footer"})
-    wasm_function = "dodgy_cast()"
+    wasm_function = function
+    print(wasm_function)
     run = ET.SubElement(modal_footer, "button", {"class": "btn btn-run", "onclick": f"$('#{content_id}').text(Module.{wasm_function});"})
     run.text = "Run"
 
@@ -46,11 +48,17 @@ def create_demo_dialog(parent : ET.Element):
 
 
 class DemoBlockProcessor(BlockProcessor):
-    RE_FENCE_START = re.compile(r"^!!demo!!")
+    RE_FENCE_START = re.compile(r"^!!demo:(?P<function>.+)!!")
     RE_FENCE_END = re.compile(r"!!demo!!$")
 
+    function = None
+
     def test(self, parent, block):
-        return self.RE_FENCE_START.match(block)
+        match = self.RE_FENCE_START.match(block)
+        if not match:
+            return None
+        self.function = match.groupdict()["function"]
+        return match
 
     def run(self, parent, blocks):
         original_block = blocks[0]
@@ -59,7 +67,7 @@ class DemoBlockProcessor(BlockProcessor):
         for block_num, block in enumerate(blocks):
             if self.RE_FENCE_END.search(block):
                 blocks[block_num] = self.RE_FENCE_END.sub('', block)
-                dialog_content = create_demo_dialog(parent)
+                dialog_content = create_demo_dialog(parent, self.function)
                 self.parser.parseBlocks(dialog_content, blocks[0:block_num + 1])
                 for i in range(0, block_num + 1):
                     blocks.pop(0)

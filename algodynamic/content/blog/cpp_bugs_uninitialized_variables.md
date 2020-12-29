@@ -50,7 +50,7 @@ write this out explicitly, the conditional expression becomes:
     uint64_t left = shape[i].size();
     uint64_t right = static_cast<uint64_t>(max_vertices); // max_vertices = -1
     
-!!demo!!
+!!demo:dodgy_cast()!!
     :::c++
     // Javascript doesn't support 64 bit integers, 
     // so we cast to a 32 bit unsigned type instead
@@ -69,11 +69,19 @@ is never going to be true, and `largest_idx` is never going to be initialized. S
         return shapes[largest_idx];
     }
     
-### Unitialized Variables
+### Uninitialized Variables
 
 So why does it crash? Well, sometimes it does, sometimes it doesn't. It depends what happens to be on the stack frame
 when `largest_idx` is declared. It might be `zero`, in which case the function will benignly return the first value
 in the `shapes` array (which may or may not be the maximum). On the other hand, it may not be zero in which case
+
+!!demo:uninitialized_int()!!
+    :::c++
+    int uninitialized_int() {
+        int val;
+        return val;
+    }
+!!demo!!
 
 ### Lessons
 
