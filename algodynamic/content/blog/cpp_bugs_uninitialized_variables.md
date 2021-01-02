@@ -1,5 +1,5 @@
 Title: Uninitialized Variables and Dodgy Casts
-Date: 2020-02-05
+Date: 2020-12-30
 Category: C++
 Source: algodynamic.js
 
@@ -111,7 +111,8 @@ While we could fix the code using the compiler warnings as a guide, a more sensi
     }
    
 However, if you are using C++20 (Or a Ranges support library such as the excellent
- [range-v3](https://github.com/ericniebler/range-v3)), then we can go one better.
+ [range-v3](https://github.com/ericniebler/range-v3)), then we can go one better and remove the redundant `begin/end`
+ iterators.
  
     :::c++
     vector<int> find_largest(const vector<vector<int>> & shapes) {
@@ -120,8 +121,6 @@ However, if you are using C++20 (Or a Ranges support library such as the excelle
       }
       return ranges::max_element(shapes, {}, [] (const auto & v) { return v.size(); });
     }
- 
- The ranges library also
  
 !!demo:find_largest()!!
     :::c++
@@ -143,5 +142,5 @@ However, if you are using C++20 (Or a Ranges support library such as the excelle
 
 ### TL;DR
 
-1. Turn on your compiler warnings and don't ignore them
+1. Turn on your compiler warnings and don't ignore them.
 2. Familiarize yourself with the STL and use it.
