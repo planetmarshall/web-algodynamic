@@ -8,8 +8,14 @@ from markdown.blockprocessors import BlockProcessor
 
 def create_demo_dialog(parent : ET.Element, function):
     dialog_id = f"dialog-{str(uuid4())[:8]}"
-    button = ET.SubElement(
+    demo_container = ET.SubElement(
         parent,
+        "div",
+        {"class": "wasm-demo-button"}
+    )
+
+    button = ET.SubElement(
+        demo_container,
         "button",
         {"type": "button", "class": "btn btn-primary", "data-toggle":"modal", "data-target":f"#{dialog_id}"}
     )
