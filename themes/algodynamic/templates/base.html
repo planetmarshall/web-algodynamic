@@ -39,9 +39,16 @@
 
 <body id="index" class="home">
         <header id="banner" class="body">
-                <h1><a href="{{ SITEURL }}/">{{ SITENAME }} <small>{{ SITESUBTITLE }}</small></a></h1>
+                <div class="container">
+                    <div class="row">
+                            <div class="col">
+                                    <span class="title"><a href="{{ SITEURL }}/">{{ SITENAME }}</a></span>
+                                    <span class="subtitle text-nowrap"><small>{{ SITESUBTITLE }}</small></span>
+                            </div>
+                    </div>
+                </div>
         </header><!-- /#banner -->
-        <nav id="menu" class="navbar navbar-dark navbar-expand-lg">
+        <nav id="menu" class="navbar navbar-dark navbar-expand-sm">
                 <ul class="navbar-nav mr-auto">
         {% for title, link in MENUITEMS %}
             <li class="nav-item"><a class="nav-link" href="{{ link }}">{{ title }}</a></li>
