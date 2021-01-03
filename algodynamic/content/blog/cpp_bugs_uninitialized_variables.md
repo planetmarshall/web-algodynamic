@@ -58,7 +58,7 @@ write this out explicitly, the conditional expression becomes:
 !!demo!!
     
     
-We can't represent `-1` with an unsigned integer, so C++ converts it to the signed integer with the same bit pattern,
+We can't represent `-1` with an unsigned integer, so C++ converts it to the unsigned integer with the same bit pattern,
  which in the case of `-1` is 2^64-1 or 1.844x10^19. In other words, 
   `max_vertices` is now the *largest possible value* that an unsigned 64bit integer can take, so the conditional
 is never going to be true, and `largest_idx` is never going to be initialized. So we may as well rewrite the function as:
