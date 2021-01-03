@@ -71,7 +71,7 @@ is never going to be true, and `largest_idx` is never going to be initialized. S
     
 ### Uninitialized Variables
 
-So why does it crash? Well, sometimes it does, sometimes it doesn't. It depends what happens to be on the stack frame
+So why does it crash? Well, sometimes it does, sometimes it doesn't. It depends what happens to be on the stack 
 when `largest_idx` is declared, which depends entirely on what the program was doing immediately before the function
  was called. In many cases it will be `zero`, in which case the function will benignly return the first value
 in the `shapes` array (which may or may not be the maximum). On the other hand, it could be some value way outside the
@@ -79,8 +79,9 @@ bounds of the array which will cause the program to crash.
 
 !!demo:uninitialized_int()!!
     :::c++
+    // compile without optimizations, otherwise compiler may just replace entire function with `ret`
     int uninitialized_int() {
-        int val;
+        int val; // uninitialized, so will be whatever 4 bytes happen to be on the stack here
         return val;
     }
 !!demo!!

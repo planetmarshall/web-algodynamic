@@ -13,6 +13,6 @@ hosted on Amazon. Some of the technology used includes
 
 * [Pelican](https://docs.getpelican.com/en/latest/index.html) - A static site generator written in Python
 * [Python-Markdown](https://python-markdown.github.io/) - I have some extensions for generating the interactive WASM examples
-* [https://emscripten.org/](https://emscripten.org/) - A [WebAssembly](https://webassembly.org/) generator for C++
+* [Emscripten](https://emscripten.org/) - A [WebAssembly](https://webassembly.org/) generator for C++
 
-I also refer to [Compiler Explorer](https://godbolt.org/)
+I also refer to [Compiler Explorer](https://godbolt.org/) by [Matt Godbolt](https://twitter.com/mattgodbolt)
