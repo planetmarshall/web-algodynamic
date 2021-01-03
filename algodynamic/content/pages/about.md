@@ -1,7 +1,7 @@
 Title: About
 
 My name is Andrew Marshall, I'm an independent software consultant based in Derbyshire, UK. 
-I specialize in C++, Python, Machine Learning and Computer Vision. I can be reached
+I specialize in C++, Python, Machine Learning and Computer Vision. I can be reached via
  
 * [LinkedIn](https://www.linkedin.com/in/algodynamic/)
 * [Github](https://github.com/planetmarshall)
