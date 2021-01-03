@@ -10,9 +10,18 @@ $dark-les-4-hex: #00090D;
 $dark-les-5-hex: #AD9A6B;
 
 .title {
+    font-family: 'Yanone Kaffeesatz', arial, sans-serif;
     font-size: xx-large;
 }
 
+h1, h2, h3 {
+    font-family: 'Yanone Kaffeesatz', arial, sans-serif;
+}
+
+body {
+    font-size: medium;
+    font-family: 'Raleway', arial, sans-serif;
+}
 
 .wasm-function {
     margin: 0.5em;
