@@ -15,7 +15,7 @@ pelican.pid
 srv.pid
 
 # python virtualenv
-webenv
+.venv
 
 # node
 node_modules
