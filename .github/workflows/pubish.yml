@@ -1,0 +1,40 @@
+name: Generate and deploy website
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        
+      - name: Setup Python
+        uses: actions/setup-python@v2.2.1
+        
+      - name: Install prerequisites
+        run: |
+          python -m pip install pip --upgrade
+          pip install -r requirements
+          pip install ./wasm_demo
+
+      - name: Generate website locally only
+        if: ${{ not(endsWith(github.ref, '/master')) }}
+        run: |
+            echo "Generate ${{ github.ref }}"
+            invoke build
+        working-directory: algodynamic
+          
+      - name: Generate and publish website
+        if: ${{ endsWith(github.ref, '/master') }}
+        run: |
+            echo "Publish ${{ github.ref }}"
+            invoke build
+        working-directory: algodynamic
+
