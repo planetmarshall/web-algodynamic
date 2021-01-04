@@ -7,7 +7,8 @@ from wasm_demo import WasmDemoExtension
 AUTHOR = 'Andrew Marshall'
 SITENAME = 'algodynamic'
 SITESUBTITLE =  'C++, Python, Computer Vision and Machine Learning'
-SITEURL = ''
+SITEURL = 'https://www.algodynamic.co.uk'
+THEME = 'theme'
 
 PATH = 'content'
 
@@ -46,6 +47,4 @@ DEFAULT_PAGINATION = 10
 
 # Uncomment following line if you want document-relative URLs when developing
 #RELATIVE_URLS = True
-PLUGIN_PATHS = ["/home/andrew/projects/pelican-plugins"]
 STATIC_PATHS = ["js"]
-PLUGINS = ["assets"]

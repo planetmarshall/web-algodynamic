@@ -1,5 +1,5 @@
 pelican[Markdown]
+pelican-webassets
 Pygments
-webassets
-libsass
 boto3
+invoke
