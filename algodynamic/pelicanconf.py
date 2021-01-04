@@ -7,7 +7,8 @@ from wasm_demo import WasmDemoExtension
 AUTHOR = 'Andrew Marshall'
 SITENAME = 'algodynamic'
 SITESUBTITLE =  'C++, Python, Computer Vision and Machine Learning'
-SITEURL = ''
+SITEURL = 'https://www.algodynamic.co.uk'
+THEME = '../algodynamic'
 
 PATH = 'content'
 
