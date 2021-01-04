@@ -103,12 +103,11 @@ While we could fix the code using the compiler warnings as a guide, a more sensi
       if (shapes.empty()) {
         return {};
       }
-      auto max_iter = std::max_element(
+      return *std::max_element(
         shapes.begin(),
         shapes.end(),
         [] (const vector<int> & a, const vector<int> & b) { return a.size() < b.size(); }
       );  
-    return *max_iter;
     }
    
 However, if you are using C++20 (Or a Ranges support library such as the excellent
@@ -120,7 +119,7 @@ However, if you are using C++20 (Or a Ranges support library such as the excelle
       if (shapes.empty()) {
         return {};
       }
-      return ranges::max_element(shapes, {}, [] (const auto & v) { return v.size(); });
+      return *ranges::max_element(shapes, {}, [] (const auto & v) { return v.size(); });
     }
  
 !!demo:find_largest()!!
@@ -129,7 +128,7 @@ However, if you are using C++20 (Or a Ranges support library such as the excelle
       if (shapes.empty()) {
         return {};
       }
-      return ranges::max_element(shapes, {}, [] (const auto & v) { return v.size(); });
+      return *ranges::max_element(shapes, {}, [] (const auto & v) { return v.size(); });
     }
     vector<vector<int>> shapes{
       {1, 2, 3, 4, 5},
