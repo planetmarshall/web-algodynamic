@@ -25,7 +25,7 @@ jobs:
           pip install ./wasm_demo
 
       - name: Generate website locally only
-        if: ${{ not(endsWith(github.ref, '/master')) }}
+        if: ${{ !(endsWith(github.ref, '/master')) }}
         run: |
             echo "Generate ${{ github.ref }}"
             invoke build
