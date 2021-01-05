@@ -15,6 +15,7 @@ srv.pid
 
 # python virtualenv
 .venv
+*.egg-info
 
 # node
 node_modules
