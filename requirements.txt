@@ -3,3 +3,4 @@ pelican-webassets
 Pygments
 boto3
 invoke
+livereload
