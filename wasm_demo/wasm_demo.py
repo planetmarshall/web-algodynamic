@@ -46,7 +46,6 @@ def create_demo_dialog(parent : ET.Element, function):
 
     modal_footer = ET.SubElement(modal_content, "div", {"class": "modal-footer"})
     wasm_function = function
-    print(wasm_function)
     run = ET.SubElement(modal_footer, "button", {"class": "btn btn-run", "onclick": f"$('#{content_id}').text(Module.{wasm_function});"})
     run.text = "Run"
 
