@@ -1,6 +1,6 @@
-@import "bootstrap-4.5.2/scss/functions";
-@import "bootstrap-4.5.2/scss/variables";
-@import "bootstrap-4.5.2/scss/mixins";
+@import "../bootstrap-4.5.3/scss/functions";
+@import "../bootstrap-4.5.3/scss/variables";
+@import "../bootstrap-4.5.3/scss/mixins";
 
 /* Color Theme Swatches in Hex */
 $dark-les-1-hex: #25000A;
@@ -75,6 +75,3 @@ a:hover {
 footer {
     font-size: 75%;
 }
-
-
-
