@@ -1,6 +1,7 @@
+boto3
+invoke
+libsass
+livereload
 pelican[Markdown]
 pelican-webassets
 Pygments
-boto3
-invoke
-livereload
