@@ -53,7 +53,7 @@ def _upload_content(output_folder, dry_run=False):
 @task
 def build(c):
     """Build local version of site"""
-    _upload_content(CONFIG['output_folder'], dry_run=True)
+    _upload_content(CONFIG['deploy_path'], dry_run=True)
     pelican_run('-s {settings_base}'.format(**CONFIG))
 
 @task
@@ -114,8 +114,6 @@ def livereload(c):
         server.watch(static_file, lambda: build(c))
     # Serve output path on configured host and port
     server.serve(host=CONFIG['host'], port=CONFIG['port'], root=CONFIG['deploy_path'])
-
-
 
 @task
 def publish(c):
