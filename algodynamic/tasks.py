@@ -4,14 +4,14 @@ import os
 import shlex
 import shutil
 import sys
-import datetime
+import logging
 
 from invoke import task
 from invoke.main import program
-from invoke.util import cd
 from pelican import main as pelican_main
 from pelican.server import ComplexHTTPRequestHandler, RootedHTTPServer
 from pelican.settings import DEFAULT_CONFIG, get_settings_from_file
+import boto3
 
 SETTINGS_FILE_BASE = 'pelicanconf.py'
 SETTINGS = {}
@@ -36,9 +36,24 @@ def clean(c):
         shutil.rmtree(CONFIG['deploy_path'])
         os.makedirs(CONFIG['deploy_path'])
 
+
+def _upload_content(output_folder, dry_run=False):
+    s3_client = boto3.client('s3')
+    bucket = "algodynamic.co.uk"
+    for root, dirs, files in os.walk(output_folder):
+        for file_name in files:
+            src_path = os.path.join(root, file_name)
+            print(src_path)
+            if not dry_run:
+                try:
+                    response = s3_client.upload_file(src_path, bucket)
+                except boto3.ClientError as e:
+                    logging.error(e)
+
 @task
 def build(c):
     """Build local version of site"""
+    _upload_content(CONFIG['output_folder'], dry_run=True)
     pelican_run('-s {settings_base}'.format(**CONFIG))
 
 @task
@@ -101,16 +116,11 @@ def livereload(c):
     server.serve(host=CONFIG['host'], port=CONFIG['port'], root=CONFIG['deploy_path'])
 
 
+
 @task
 def publish(c):
-    """Publish to production via rsync"""
+    """Publish to production via Amazon S3"""
     pelican_run('-s {settings_publish}'.format(**CONFIG))
-    c.run(
-        'rsync --delete --exclude ".DS_Store" -pthrvz -c '
-        '-e "ssh -p {ssh_port}" '
-        '{} {ssh_user}@{ssh_host}:{ssh_path}'.format(
-            CONFIG['deploy_path'].rstrip('/') + '/',
-            **CONFIG))
 
 
 def pelican_run(cmd):
