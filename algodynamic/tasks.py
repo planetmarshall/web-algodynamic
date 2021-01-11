@@ -60,8 +60,8 @@ def _upload_content(output_folder, dry_run=False):
 @task
 def build(c):
     """Build local version of site"""
-    _upload_content(CONFIG['deploy_path'], dry_run=True)
     pelican_run('-s {settings_base}'.format(**CONFIG))
+    _upload_content(CONFIG['deploy_path'], dry_run=True)
 
 @task
 def rebuild(c):
@@ -125,8 +125,8 @@ def livereload(c):
 @task
 def publish(c):
     """Publish to production via Amazon S3"""
-    _upload_content(CONFIG['deploy_path'])
     pelican_run('-s {settings_publish}'.format(**CONFIG))
+    _upload_content(CONFIG['deploy_path'])
 
 
 def pelican_run(cmd):
