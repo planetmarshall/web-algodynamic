@@ -29,11 +29,12 @@ jobs:
           pip install ./wasm_demo
         working-directory: main
 
-      - name: Install emcripten
+      - name: Install Emscripten
         run: |
           git clone https://github.com/emscripten-core/emsdk.git
           cd emsdk
           ./emsdk install latest
+          ./emsdk activate latest
 
       - name: Build WASM Demos
         run: |
