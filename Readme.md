@@ -2,6 +2,11 @@
 
 Source for my website at https://www.algodynamic.co.uk
 
+### Status
+
+![Building](https://github.com/planetmarshall/web-algodynamic/workflows/publish/badge.svg)
+
+
 ## Prerequisites
 
 ```
@@ -9,10 +14,32 @@ pip install -r requirements.txt --upgrade
 pip install ./wasm_demo
 ```
 
+Install [Emscripten](https://emscripten.org/docs/getting_started/downloads.html) to build the WASM Demos
+
+For the C++ Dependencies
+
+```
+mkdir -p demos/build
+cd demos/build
+conan install .. --build outdated
+```
+
+## Build WASM Demos
+
+```
+mkdir demos/build
+cd demos/build
+cmake .. -DCMAKE_TOOLCHAIN_FILE=<EMSCRIPTEN>/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake \
+         -DCMAKE_INSTALL_PREFIX=../../web/content
+cmake --build . 
+cmake --build . --target install
+
+```
+
 ## Build
 
 ```
-cd algodynamic
+cd web
 invoke build
 ```
 
