@@ -31,9 +31,6 @@ CONFIG = {
 }
 
 
-def _build_wasm(target_folder):
-    run("cmake --version")
-
 @task
 def clean(c):
     """Remove generated files"""
@@ -71,14 +68,12 @@ def _upload_content(output_folder, dry_run=False):
 @task
 def build(c):
     """Build local version of site"""
-    _build_wasm(SETTINGS['OUTPUT_PATH'])
     pelican_run('-s {settings_base}'.format(**CONFIG))
     _upload_content(CONFIG['deploy_path'], dry_run=True)
 
 @task
 def rebuild(c):
     """`build` with the delete switch"""
-    _build_wasm(SETTINGS['OUTPUT_PATH'])
     pelican_run('-d -s {settings_base}'.format(**CONFIG))
 
 @task
@@ -138,7 +133,6 @@ def livereload(c):
 @task
 def publish(c):
     """Publish to production via Amazon S3"""
-    _build_wasm(SETTINGS['OUTPUT_PATH'])
     pelican_run('-s {settings_publish}'.format(**CONFIG))
     _upload_content(CONFIG['deploy_path'])
 
