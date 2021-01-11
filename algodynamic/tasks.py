@@ -44,17 +44,18 @@ def _included_paths(output_folder):
         if components[-1] in exclude:
             continue
         for file_name in files:
-            yield os.path.join(root, file_name)
+            src = os.path.join(root, file_name)
+            yield src, os.path.relpath(src, output_folder)
 
 
 def _upload_content(output_folder, dry_run=False):
     s3_client = boto3.client('s3')
     bucket = "algodynamic.co.uk"
     prefix = "" if not dry_run else "(Dry Run) "
-    for src_path in _included_paths(output_folder):
-        print(f"{prefix}Uploading {src_path}")
+    for src, dest in _included_paths(output_folder):
+        print(f"{prefix}Uploading {src} to {dest}")
         if not dry_run:
-            response = s3_client.upload_file(src_path, bucket)
+            response = s3_client.upload_file(src, bucket, dest)
 
 @task
 def build(c):
