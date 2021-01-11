@@ -4,7 +4,6 @@ import os
 import shlex
 import shutil
 import sys
-import logging
 
 from invoke import task
 from invoke.main import program
@@ -55,10 +54,7 @@ def _upload_content(output_folder, dry_run=False):
     for src_path in _included_paths(output_folder):
         print(f"{prefix}Uploading {src_path}")
         if not dry_run:
-            try:
-                response = s3_client.upload_file(src_path, bucket)
-            except boto3.ClientError as e:
-                logging.error(e)
+            response = s3_client.upload_file(src_path, bucket)
 
 @task
 def build(c):
