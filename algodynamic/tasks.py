@@ -29,6 +29,7 @@ CONFIG = {
     'port': 8000,
 }
 
+
 @task
 def clean(c):
     """Remove generated files"""
@@ -37,18 +38,27 @@ def clean(c):
         os.makedirs(CONFIG['deploy_path'])
 
 
+def _included_paths(output_folder):
+    exclude = [".webassets-cache"]
+    for root, folders, files in os.walk(output_folder):
+        components = os.path.split(root)
+        if components[-1] in exclude:
+            continue
+        for file_name in files:
+            yield os.path.join(root, file_name)
+
+
 def _upload_content(output_folder, dry_run=False):
     s3_client = boto3.client('s3')
     bucket = "algodynamic.co.uk"
-    for root, dirs, files in os.walk(output_folder):
-        for file_name in files:
-            src_path = os.path.join(root, file_name)
-            print(src_path)
-            if not dry_run:
-                try:
-                    response = s3_client.upload_file(src_path, bucket)
-                except boto3.ClientError as e:
-                    logging.error(e)
+    prefix = "" if not dry_run else "(Dry Run) "
+    for src_path in _included_paths(output_folder):
+        print(f"{prefix}Uploading {src_path}")
+        if not dry_run:
+            try:
+                response = s3_client.upload_file(src_path, bucket)
+            except boto3.ClientError as e:
+                logging.error(e)
 
 @task
 def build(c):
