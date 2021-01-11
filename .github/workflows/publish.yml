@@ -20,6 +20,7 @@ jobs:
         
       - name: Install prerequisites
         run: |
+          set -euo pipefail
           python -m pip install pip --upgrade
           pip install -r requirements.txt --upgrade
           pip install ./wasm_demo
@@ -27,6 +28,7 @@ jobs:
       - name: Generate website locally only
         if: ${{ !(endsWith(github.ref, '/master')) }}
         run: |
+            set -euo pipefail
             echo "Generate ${{ github.ref }}"
             invoke build
         working-directory: algodynamic
@@ -34,6 +36,7 @@ jobs:
       - name: Generate and publish website
         if: ${{ endsWith(github.ref, '/master') }}
         run: |
+            set -euo pipefail
             echo "Publish ${{ github.ref }}"
             invoke publish
         working-directory: algodynamic
