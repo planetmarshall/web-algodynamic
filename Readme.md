@@ -45,14 +45,14 @@ invoke build
 ## Local testing
 
 ```
-cd algodynamic
+cd web
 invoke livereload
 ```
 
 ## Publish
 
 ```
-cd algodynamic
+cd web
 invoke publish
 ```
 
