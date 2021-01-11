@@ -4,8 +4,7 @@ Source for my website at https://www.algodynamic.co.uk
 
 ### Status
 
-![Building](https://github.com/planetmarshall/web-algodynamic/workflows/publish/badge.svg)
-
+![Generate and Deploy](https://github.com/planetmarshall/web-algodynamic/workflows/Generate%20and%20deploy%20website/badge.svg)
 
 ## Prerequisites
 
