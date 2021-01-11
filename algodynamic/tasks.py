@@ -128,6 +128,7 @@ def livereload(c):
 @task
 def publish(c):
     """Publish to production via Amazon S3"""
+    _upload_content(CONFIG['deploy_path'])
     pelican_run('-s {settings_publish}'.format(**CONFIG))
 
 
