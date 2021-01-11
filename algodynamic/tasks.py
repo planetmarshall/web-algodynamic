@@ -4,6 +4,7 @@ import os
 import shlex
 import shutil
 import sys
+import mimetypes
 
 from invoke import task
 from invoke.main import program
@@ -45,17 +46,23 @@ def _included_paths(output_folder):
             continue
         for file_name in files:
             src = os.path.join(root, file_name)
-            yield src, os.path.relpath(src, output_folder)
+            content_type, _ = mimetypes.guess_type(src)
+            yield src, os.path.relpath(src, output_folder), content_type
 
 
 def _upload_content(output_folder, dry_run=False):
     s3_client = boto3.client('s3')
     bucket = "algodynamic.co.uk"
     prefix = "" if not dry_run else "(Dry Run) "
-    for src, dest in _included_paths(output_folder):
-        print(f"{prefix}Uploading {src} to {dest}")
+    for src, dest, content_type in _included_paths(output_folder):
+        print(f"{prefix}Uploading {src} to {dest} ({content_type})")
         if not dry_run:
-            response = s3_client.upload_file(src, bucket, dest)
+            s3_client.upload_file(
+                src,
+                bucket,
+                dest,
+                ExtraArgs={'ACL': 'public-read', 'ContentType': content_type}
+            )
 
 @task
 def build(c):
