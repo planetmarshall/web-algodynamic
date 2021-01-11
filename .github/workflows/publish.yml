@@ -13,8 +13,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-        
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: main
+
       - name: Setup Python
         uses: actions/setup-python@v2.2.1
         
@@ -24,6 +27,7 @@ jobs:
           python -m pip install pip --upgrade
           pip install -r requirements.txt --upgrade
           pip install ./wasm_demo
+        working-directory: main
 
       - name: Install emcripten
         run: |
@@ -31,13 +35,28 @@ jobs:
           cd emsdk
           ./emsdk install latest
 
+      - name: Build WASM Demos
+        run: |
+          mkdir build
+          conan install . -if build -s build_type=Debug --build outdated
+          cmake \
+            -S . \
+            -B build \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DCMAKE_TOOLCHAIN_FILE=${GITHUB_WORKSPACE}/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake \
+            -DCMAKE_INSTALL_PREFIX=${GITHUB_WORKSPACE}/main/web/content \
+            -G Ninja
+          cmake --build build .
+          cmake --build build --target install
+        working-directory: main/demos
+
       - name: Generate website locally only
         if: ${{ !(endsWith(github.ref, '/master')) }}
         run: |
             set -euo pipefail
             echo "Generate ${{ github.ref }}"
             invoke build
-        working-directory: algodynamic
+        working-directory: main/web
           
       - name: Generate and publish website
         if: ${{ endsWith(github.ref, '/master') }}
@@ -45,7 +64,7 @@ jobs:
             set -euo pipefail
             echo "Publish ${{ github.ref }}"
             invoke publish
-        working-directory: algodynamic
+        working-directory: main/web
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
