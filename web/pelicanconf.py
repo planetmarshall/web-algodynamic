@@ -11,9 +11,6 @@ SITEURL = 'https://www.algodynamic.co.uk'
 THEME = 'theme'
 
 PATH = 'content'
-PLUGINS = [
-    'pelican_webassets'
-]
 WEBASSETS_SOURCE_PATHS = [
     "src"
 ]
