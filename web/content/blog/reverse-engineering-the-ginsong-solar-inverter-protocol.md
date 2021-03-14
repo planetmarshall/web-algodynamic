@@ -13,6 +13,10 @@ in order to display a chart as part of my OpenHAB panel.
 The source and installation instructions for the service are available from Github at
 [planetmarshall/solis-ginlong-service](https://github.com/planetmarshall/solis-ginlong-service)
 
+I have the service running on a [Raspberry Pi](https://www.raspberrypi.org/) 
+under [supervisor](http://supervisord.org/). [Happy Pi day](https://en.wikipedia.org/wiki/Pi_Day)!
+
+
 ## Previous work
 
 For previous work along these lines, which I've referred to when creating this solution, see
