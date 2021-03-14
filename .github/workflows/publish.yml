@@ -2,9 +2,9 @@ name: Generate and deploy website
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
   workflow_dispatch:
 
@@ -27,7 +27,7 @@ jobs:
           sudo apt-get install ninja-build
           python -m pip install pip --upgrade
           pip install -r requirements.txt --upgrade
-          pip install ./wasm_demo
+          pip install ./extensions
         working-directory: main
 
       - name: Install Emscripten
@@ -53,7 +53,7 @@ jobs:
         working-directory: main/demos
 
       - name: Generate website locally only
-        if: ${{ !(endsWith(github.ref, '/master')) }}
+        if: ${{ !(endsWith(github.ref, '/main')) }}
         run: |
             set -euo pipefail
             echo "Generate ${{ github.ref }}"
@@ -61,7 +61,7 @@ jobs:
         working-directory: main/web
           
       - name: Generate and publish website
-        if: ${{ endsWith(github.ref, '/master') }}
+        if: ${{ endsWith(github.ref, '/main') }}
         run: |
             set -euo pipefail
             echo "Publish ${{ github.ref }}"

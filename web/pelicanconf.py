@@ -1,8 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*- #
-from __future__ import unicode_literals
+from algodynamic_markdown_extensions import WasmDemoExtension, PlotExtension
 
-from wasm_demo import WasmDemoExtension
 
 AUTHOR = 'Andrew Marshall'
 SITENAME = 'algodynamic'
@@ -11,9 +8,6 @@ SITEURL = 'https://www.algodynamic.co.uk'
 THEME = 'theme'
 
 PATH = 'content'
-PLUGINS = [
-    'pelican_webassets'
-]
 WEBASSETS_SOURCE_PATHS = [
     "src"
 ]
@@ -29,7 +23,7 @@ AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
 MARKDOWN = {
-    'extensions': [WasmDemoExtension()],
+    'extensions': [WasmDemoExtension(), PlotExtension()],
     'extension_configs': {
         'markdown.extensions.codehilite': {'css_class': 'highlight'},
         'markdown.extensions.extra': {},
@@ -52,4 +46,4 @@ DEFAULT_PAGINATION = 10
 
 # Uncomment following line if you want document-relative URLs when developing
 RELATIVE_URLS = True
-STATIC_PATHS = ["js"]
+STATIC_PATHS = ["js", "data", "images"]
