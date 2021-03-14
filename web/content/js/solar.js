@@ -10,7 +10,7 @@ Plotly.d3.csv("/data/solar.csv", function(err, rows) {
     var dcv = {
         type: "scatter",
         mode: "lines",
-        name: "DC Voltage Input",
+        name: "DC Input Power (W)",
         line: {
             dash: "dot",
         },

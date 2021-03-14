@@ -4,14 +4,14 @@ Category: Python
 Source: solar.js
 
 One of my major tasks this year is to do a thorough renovation of my home's energy efficiency - the
-first completed project is an installation of Solar Photovoltaic Panels on the roof. The Inverter
+first completed project is an installation of Solar Photovoltaic Panels. The PV inverter
 reports the panels' power output to a central server, but I wanted to get hold of this data myself
 in order to display a chart as part of my OpenHAB panel.
 
 ## TL;DR
 
 The source and installation instructions for the service are available from Github at
-[planetmarshall/solis-ginlong-service](solis-ginlong-service)
+[planetmarshall/solis-ginlong-service](https://github.com/planetmarshall/solis-ginlong-service)
 
 ## Previous work
 
@@ -52,6 +52,7 @@ sending data. We can start examining the data with the following short Python sc
 The initial data from the inverter is a 99-byte message, some of which is immediately identifiable
 as the firmware version and the local IP of the inverter.
 
+    :::python
     b'...\x00\x00\x05<x...MW_08_512_0501_1.82...\x00\x00...192.168.10.8...\xa8\x15'
     
 However, we know from previous work and from the data available on the ginlong server, that the
@@ -99,6 +100,7 @@ inverter starts sending back a 246 byte message that looks much more interesting
 
 In response to the heartbeat, the server sends back a 23 byte message that looks like this - 
 
+    :::python
     b'\xa5\n\x00\x10\x11K\x01\xc2\xe8\xd7\xf0\x02\x01\x8f~K`\x00\x00\x00\x00\xa3\x15'
    
 Unless the developers have used some sort of standard serialization format like 
