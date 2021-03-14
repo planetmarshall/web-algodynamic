@@ -1,6 +1,7 @@
 Title: Reverse Engineering the Solis/Ginlong Inverter Protocol
-Date: 2021-03-12
+Date: 2021-03-14
 Category: Python
+Source: solar.js
 
 One of my major tasks this year is to do a thorough renovation of my home's energy efficiency - the
 first completed project is an installation of Solar Photovoltaic Panels on the roof. The Inverter
@@ -9,7 +10,8 @@ in order to display a chart as part of my OpenHAB panel.
 
 ## TL;DR
 
-
+The source and installation instructions for the service are available from Github at
+[planetmarshall/solis-ginlong-service](solis-ginlong-service)
 
 ## Previous work
 
@@ -19,13 +21,19 @@ For previous work along these lines, which I've referred to when creating this s
 * Darren Poulson's [ginlong-mqtt](https://github.com/dpoulson/ginlong-mqtt)
 
 Unfortunately the protocol has been updated since these solutions were created and
-neither of them worked for me.
+neither of them worked for me. The following applies to firmware version `MW_08_512_0501_1.82`
 
 ## Determining the protocol
 
 ### Redirect the inverter output to a local system
 
-[Ginlong Support](https://usservice.ginlong.com/support/solutions/articles/36000241195-monitoring-accessory-configured-but-still-won-t-link-)
+The Web UI for the Inverter offers the option to redirect its output to a secondary server, `Server B`. Unfortunately,
+this option appears to not work with the latest firmware. Instead it's possible to change the Default server entirely,
+from the remote Ginlong monitoring server, to a system on the local network. This option is hidden and can be found by
+referring to the following page - [Ginlong Support](https://usservice.ginlong.com/support/solutions/articles/36000241195-monitoring-accessory-configured-but-still-won-t-link-)
+
+At this point it's useful to have [Wireshark](https://www.wireshark.org/) open to check that the inverter is actually 
+sending data. We can start examining the data with the following short Python script.
 
     :::python
     async def handle_inverter(reader, writer):
@@ -105,6 +113,18 @@ number `1615560335`. Work with binary data enough, and some things start to look
 just happens to be the number of seconds since Thursday 1 January, 1970 - better known as 
 [Unix time](https://en.wikipedia.org/wiki/Unix_time).
 
+If we plot the last-byte-but-one, it looks like random noise. This is a good indication that it's a 
+[Checksum](https://en.wikipedia.org/wiki/Checksum). This is important because it's likely that the Inverter will verify
+that the checksum is correct on any message it receives. Fortunately the checksum algorithm is fairly simple, and a bit of
+trial and error reveals that it's a variation on the ISO 115 
+[Longitudinal redundancy check](https://en.wikipedia.org/wiki/Longitudinal_redundancy_check)
+
+    :::python
+    from functools import reduce
+    
+    def checksum(data):
+        return reduce(lambda lrc, x: (lrc + x) & 255, data)
+
 ## Decoding the inverter data packet
 
 We could sift through the 246 byte inverter data packet in a similar fashion looking for interesting values, 
@@ -118,21 +138,23 @@ Here are some results from running the correlation algorithm.
 | column                              |   correlation |   field | format   |
 |:------------------------------------|--------------:|--------:|---------:|
 | AC Current T/W/C(A)                 |   0.98    |      60 | <I       |
-| AC Output Frequency R(Hz)           |   0.96     |      67 | <I       |
 | AC Output Total Power (Active)(W)   |   0.99    |     116 | <I       |
-| AC Voltage T/W/C(V)                 |   0.95    |      66 | <I       |
-| DC Current1(A)                      |   0.99    |      54 | <H       |
 | DC Voltage PV1(V)                   |   0.98    |      48 | <I       |
-| Daily Generation (Active)(kWh)      |   0.91    |      74 | <I       |
 | Inverter Temperature(C)             |  0.996    |      45 | <I       |
 | Power Grid Total Apparent Power(VA) |   0.99    |     142 | <I       |
-| Total DC Input Power(W)             |   0.99    |     115 | <I       |
+| Total DC Input Power(W)             |   0.99    |     116 | <I       |
 
 
 Note that some of these interpretations are mutually exclusive, for instance AC Voltage and AC Output Freq 
 can't be both 32 bit integers in fields 66 and 67 as they would overlap. In addition some values
 will correlate due simply to physics, but it's enough of a guide to 
 start extracting information from the packet.
+
+!!plot:inverter!!
+!!plot!!
+
+Here's the results of the investigation. Some fields are yet to be determined as I don't have enough data as yet.
+I've annotated the fields with the appropriate physical unit using [pint](https://pint.readthedocs.io/en/stable/)
 
     :::python
     return {
@@ -149,4 +171,10 @@ start extracting information from the packet.
         "generation_yesterday":             0.1 * unpack_from("<H", message, 128)[0] * ureg.kilowatt_hour,
         "power_grid_total_apparent_power":  float(unpack_from("<I", message, 142)[0]) * ureg.volt_ampere,
     }
-        
+       
+## Persisting the data
+
+With the protocol determined, we can remove the Ginlong server from the equation and deserialize and persist the 
+data ourselves. I use [Influxdb](https://www.influxdata.com/) and [Grafana](https://grafana.com/).
+       
+ ![Grafana plot](/images/grafana.png)
