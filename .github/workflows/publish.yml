@@ -27,7 +27,7 @@ jobs:
           sudo apt-get install ninja-build
           python -m pip install pip --upgrade
           pip install -r requirements.txt --upgrade
-          pip install ./wasm_demo
+          pip install ./extensions
         working-directory: main
 
       - name: Install Emscripten
