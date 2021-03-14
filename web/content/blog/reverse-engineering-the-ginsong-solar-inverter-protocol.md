@@ -7,6 +7,10 @@ first completed project is an installation of Solar Photovoltaic Panels on the r
 reports the panels' power output to a central server, but I wanted to get hold of this data myself
 in order to display a chart as part of my OpenHAB panel.
 
+## TL;DR
+
+
+
 ## Previous work
 
 For previous work along these lines, which I've referred to when creating this solution, see
@@ -57,19 +61,20 @@ to send us the data instead without involving ginlong's server at all
     :::python
     async def read_and_log_response(reader):
         data = await reader.read(256)
-        print(data)
+        print(data) # in practice we log more info
         return data
         
     async def log_and_forward_response(reader, writer):
         data = await read_and_log_response(reader)
         writer.write(data)
         await writer.drain()
-        writer.close()
         
     async def handle_inverter_message(inverter_reader, inverter_writer):
         server_reader, server_writer = await asyncio.open_connection('47.88.8.200', 10000)
         await log_and_forward_response(inverter_reader, server_writer)
         await log_and_forward_response(server_reader, inverter_writer)
+        server_writer.close()
+        inverter_writer.close()
 
     async def main():
         server = await asyncio.start_server(
@@ -108,3 +113,40 @@ on to the Ginlong server, we can log into the portal and export the data collect
 us an indication of what the packet should contain. We can then write a brute-force algorithm that compares
 the expected data to various decoded values in the data packet and look for correlations.
 
+Here are some results from running the correlation algorithm.
+
+| column                              |   correlation |   field | format   |
+|:------------------------------------|--------------:|--------:|---------:|
+| AC Current T/W/C(A)                 |   0.98    |      60 | <I       |
+| AC Output Frequency R(Hz)           |   0.96     |      67 | <I       |
+| AC Output Total Power (Active)(W)   |   0.99    |     116 | <I       |
+| AC Voltage T/W/C(V)                 |   0.95    |      66 | <I       |
+| DC Current1(A)                      |   0.99    |      54 | <H       |
+| DC Voltage PV1(V)                   |   0.98    |      48 | <I       |
+| Daily Generation (Active)(kWh)      |   0.91    |      74 | <I       |
+| Inverter Temperature(C)             |  0.996    |      45 | <I       |
+| Power Grid Total Apparent Power(VA) |   0.99    |     142 | <I       |
+| Total DC Input Power(W)             |   0.99    |     115 | <I       |
+
+
+Note that some of these interpretations are mutually exclusive, for instance AC Voltage and AC Output Freq 
+can't be both 32 bit integers in fields 66 and 67 as they would overlap. In addition some values
+will correlate due simply to physics, but it's enough of a guide to 
+start extracting information from the packet.
+
+    :::python
+    return {
+        "inverter_serial_number":           message[32:48].decode("ascii").rstrip(),
+        "inverter_temperature":             0.1 * unpack_from("<H", message, 48)[0] * ureg.centigrade,
+        "dc_voltage_pv1":                   0.1 * unpack_from("<H", message, 50)[0] * ureg.volt,  # could also be 52
+        "dc_current":                       0.1 * unpack_from("<H", message, 54)[0] * ureg.amperes,
+        "ac_current_t_w_c":                 0.1 * unpack_from("<H", message, 62)[0] * ureg.amperes,
+        "ac_voltage_t_w_c":                 0.1 * unpack_from("<H", message, 68)[0] * ureg.volt,
+        "ac_output_frequency":              0.01 * unpack_from("<H", message, 70)[0] * ureg.hertz,
+        "daily_active_generation":          0.01 * unpack_from("<H", message, 76)[0] * ureg.kilowatt_hour,
+        "total_dc_input_power":             float(unpack_from("<I", message, 116)[0]) * ureg.watts,
+        "total_active_generation":          float(unpack_from("<I", message, 120)[0]) * ureg.kilowatt_hour, # or 130
+        "generation_yesterday":             0.1 * unpack_from("<H", message, 128)[0] * ureg.kilowatt_hour,
+        "power_grid_total_apparent_power":  float(unpack_from("<I", message, 142)[0]) * ureg.volt_ampere,
+    }
+        
