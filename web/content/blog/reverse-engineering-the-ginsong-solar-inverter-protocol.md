@@ -2,6 +2,7 @@ Title: Reverse Engineering the Solis/Ginlong Inverter Protocol
 Date: 2021-03-14
 Category: Python
 Source: solar.js
+og_image: /images/grafana.png
 
 One of my major tasks this year is to do a thorough renovation of my home's energy efficiency - the
 first completed project is an installation of Solar Photovoltaic Panels. The PV inverter

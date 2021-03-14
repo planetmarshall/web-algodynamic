@@ -16,9 +16,10 @@ PLUGIN_PATHS = [
     '../plugins'
 ]
 PLUGINS = [
-    'pelican-open-graph'
+    'pelican-open-graph',
+    'webassets'
 ]
-
+LOAD_CONTENT_CACHE = False
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
 CATEGORY_FEED_ATOM = None
