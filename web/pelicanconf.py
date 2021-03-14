@@ -6,14 +6,18 @@ SITENAME = 'algodynamic'
 SITESUBTITLE =  'C++, Python, Computer Vision and Machine Learning'
 SITEURL = 'https://www.algodynamic.co.uk'
 THEME = 'theme'
-
 PATH = 'content'
 WEBASSETS_SOURCE_PATHS = [
     "src"
 ]
 TIMEZONE = 'GMT'
-
 DEFAULT_LANG = 'en'
+PLUGIN_PATHS = [
+    '../plugins'
+]
+PLUGINS = [
+    'pelican-open-graph'
+]
 
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
