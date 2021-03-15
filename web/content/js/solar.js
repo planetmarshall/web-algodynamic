@@ -12,7 +12,9 @@ Plotly.d3.csv("/data/solar.csv", function(err, rows) {
         mode: "lines",
         name: "DC Input Power (W)",
         line: {
-            dash: "dot",
+            width: 1,
+            dash: "solid",
+            color: "rgba(89,4,31, 1)"
         },
         x: unpack(rows, 'time'),
         y: unpack(rows, 'dc'),
@@ -23,16 +25,20 @@ Plotly.d3.csv("/data/solar.csv", function(err, rows) {
         mode: "lines",
         name: "Bytes 116-119 (<I)",
         line: {
-            dash: "solid",
+            width: 1,
+            color: "rgba(172,154,107, 1)"
         },
         x: unpack(rows, 'time'),
         y: unpack(rows, 'bytes'),
+        xaxis: "x2",
+        yaxis: "y2",
     }
 
     var data = [dcv, d116];
 
     var layout = {
-        'title': "Result of correlation algorithm (Offset for illustration purposes)"
+        title: "Result of correlation algorithm (Offset for illustration purposes)",
+        grid: {rows: 1, columns: 2, pattern: 'independent'},
     };
 
     Plotly.newPlot(inverter, data, layout, {displayModeBar: false, responsive: true});
