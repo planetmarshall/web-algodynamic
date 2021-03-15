@@ -32,7 +32,7 @@ Plotly.d3.csv("/data/solar.csv", function(err, rows) {
     var data = [dcv, d116];
 
     var layout = {
-        'title': "Result of correlation algorithm"
+        'title': "Result of correlation algorithm (Offset for illustration purposes)"
     };
 
     Plotly.newPlot(inverter, data, layout, {displayModeBar: false, responsive: true});
