@@ -1,0 +1,3 @@
+[submodule "plugins/pelican-open-graph"]
+	path = plugins/pelican-open-graph
+	url = https://github.com/whiskyechobravo/pelican-open_graph

@@ -17,6 +17,8 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: main
+          submodules: true
+          lfs: true
 
       - name: Setup Python
         uses: actions/setup-python@v2.2.1

@@ -2,6 +2,9 @@ Title: Reverse Engineering the Solis/Ginlong Inverter Protocol
 Date: 2021-03-14
 Category: Python
 Source: solar.js
+og_image: /images/grafana.png
+
+[Happy Pi day](https://en.wikipedia.org/wiki/Pi_Day)!
 
 One of my major tasks this year is to do a thorough renovation of my home's energy efficiency - the
 first completed project is an installation of Solar Photovoltaic Panels. The PV inverter
@@ -11,10 +14,10 @@ in order to display a chart as part of my OpenHAB panel.
 ## TL;DR
 
 The source and installation instructions for the service are available from Github at
-[planetmarshall/solis-ginlong-service](https://github.com/planetmarshall/solis-ginlong-service)
+[planetmarshall/solis-service](https://github.com/planetmarshall/solis-service)
 
 I have the service running on a [Raspberry Pi](https://www.raspberrypi.org/) 
-under [supervisor](http://supervisord.org/). [Happy Pi day](https://en.wikipedia.org/wiki/Pi_Day)!
+under [supervisor](http://supervisord.org/). 
 
 
 ## Previous work
