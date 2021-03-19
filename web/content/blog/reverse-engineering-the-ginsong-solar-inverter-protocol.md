@@ -19,6 +19,10 @@ The source and installation instructions for the service are available from Gith
 I have the service running on a [Raspberry Pi](https://www.raspberrypi.org/) 
 under [supervisor](http://supervisord.org/). 
 
+Here's the data displayed in a Grafana dashboard on my Raspberry Pi Touchscreen
+
+ ![Grafana plot](/images/grafana.png)
+
 
 ## Previous work
 
@@ -186,4 +190,3 @@ I've annotated the fields with the appropriate physical unit using [pint](https:
 With the protocol determined, we can remove the Ginlong server from the equation and deserialize and persist the 
 data ourselves. I use [Influxdb](https://www.influxdata.com/) and [Grafana](https://grafana.com/).
        
- ![Grafana plot](/images/grafana.png)
