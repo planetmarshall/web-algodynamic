@@ -8,9 +8,23 @@ Source for my website at https://www.algodynamic.co.uk
 
 ## Prerequisites
 
+Create a Python virtual environment in the root folder
+
+```
+$ python -m venv .venv
+```
+
+
 ```
 pip install -r requirements.txt --upgrade
 pip install ./wasm_demo
+```
+
+Install the markdown extensions
+
+```
+$ cd extensions
+$ pip install .
 ```
 
 Install [Emscripten](https://emscripten.org/docs/getting_started/downloads.html) to build the WASM Demos
