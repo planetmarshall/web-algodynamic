@@ -1,7 +1,7 @@
 A Modern Cross Platform C++ Project from Scratch
 ################################################
 
-:date: 2021-08-08
+:date: 2022-10-25
 :category: C++
 
 In the working life of a Software Engineer, it's actually pretty rare that you get to start
@@ -68,21 +68,21 @@ compiled with the three major compilers:
 
 In addition, raise the warning levels to their highest level. You may also wish to have all warnings flagged as errors
 in your code. Compiler level checks are one of the strengths of C++ and ignoring them can lead to subtle, and not so
-subtle, bugs in your code.
+subtle, bugs in your code. See my `other post <uninitialized-variables-and-dodgy-casts.html>`_ for an example.
 
 
 CMake
 -----
 
-To a large degree the existence of CMake is what makes modern cross platform C++ development possible. It certainly
-has its detractors, but by its sheer ubiquity it is the defacto standard build system for C++. While strictly speaking
+To a large degree the existence of CMake is what makes modern cross platform C++ development possible. Its syntax can
+ba a bit obscure, but by its sheer ubiquity it is the defacto standard build system for C++. While strictly speaking
 it is a "meta" build system, this detail has become less important in recent years with CMake getting native support
 in IDEs like MSVC and CLion.
 
 Alternatives
 
-* Meson
-* Bazel
+* `Meson <https://mesonbuild.com/>`_ Widely used especially by GNU projects.
+* `Bazel <https://bazel.build/>`_ Used by Google projects such as Tensorflow.
 
 Conan
 -----
@@ -94,14 +94,15 @@ be a defacto standard, it's heading in that direction.
 The `Conan Centre Index (CCI) <https://github.com/conan-io/conan-center-index>`_ contains packages for
 many of the most widely used C++ libraries, such as Boost, Eigen and OpenCV.
 
+
 Conan and CMake
 ~~~~~~~~~~~~~~~
 
 Conan works tightly together with CMake and one of its major advantages is its ability to generate CMake module files
 for all of your dependencies, regardless of what build system the dependency originally used.
 
-Because Conan generates a toolcahin file for use with CMake, there's some crossover in responsibility as you can use
-Conan to setup your project in much the same way as you would use CMake Presets. That's not the approcah I've gone for
+Because Conan generates a toolchain file for use with CMake, there's some crossover in responsibility as you can use
+Conan to setup your project in much the same way as you would use CMake Presets. That's not the approach I've gone for
 here, and instead I use CMake Presets and just use Conan for dependency management.
 
 
@@ -109,7 +110,9 @@ Static Analysis
 ---------------
 
 As a statically typed language, your compiler already does static analysis for you (which is why it makes sense
-to build with multiple configurations). However
+to build with multiple configurations). However tools such as `clang-tidy <https://clang.llvm.org/extra/clang-tidy/>`_
+can pick up other issues such as readability and security issues. It's also worth mentioning that some clang-tidy checks
+are project specific and others mutually exclusive, so check which ones are appropriate for your project.
 
 Note when running clang tidy on Ubuntu I ran into this bug - https://github.com/llvm/llvm-project/issues/46804
 
@@ -121,34 +124,34 @@ I have yet to find a satisfactory solution for documentation of C++ source. Doxy
 and the format is a defacto standard, but the source is dated and
 has fallen behind in support for some of the latest C++ features -
 
-References
-
 
 Continuous Integration
 ----------------------
 
-As I'm using Github, I've opted to use Github Workflows (other options are available). As I'm also using Conan
+Continuous Integration (CI) pulls all of these things together, and performs the crucial task of ensuring that your
+code always compiles whenever changes are made. In addition you can also run tests and other automated tasks. The example
+project performs the following tasks automatically:
 
-The particular configurations you choose to use will depend on your project, but as I'm mostly interested in using
-the latest C++ features (ie C++20), I'll only be using the latest compilers. I use a github workflow matrix build
-to build for the following configurations
+* Runs ``clang-tidy`` against any changed files and fails on warnings
+* Builds the project across the following compilers and platforms in both Debug and Release modes, in Shared and
+  Static configurations
 
-=======     ===================
-Linux       GCC 11
-Linux       Clang 11, libstdc++
-Linux       Clang 11, libc++
-Windows     Visual Studio 2019
-MacOS       Apple Clang 12
-=======     ===================
+  =======     ===================
+  Linux       GCC
+  Linux       Clang, libstdc++
+  Linux       Clang, LLVM libc++
+  Windows     Visual Studio
+  Windows     Visual Studio with Clang
+  MacOS       Apple Clang (ARM64)
+  =======     ===================
 
-As mentioned above, you can use Conan to
-`build <https://docs.conan.io/en/latest/mastering/conanfile_py.html#conan-build>`_ the project in CI, this has the
-advantage that Conan will manage most of your CMake settings for you, some of which can be quite intricate
-( such as
-`Position Independent Code <https://cmake.org/cmake/help/latest/prop_tgt/POSITION_INDEPENDENT_CODE.html>`_
-and `RPATH <https://gitlab.kitware.com/cmake/community/-/wikis/doc/cmake/RPATH-handling>`_ settings ).
+* Runs unit tests for each configuration
+* Generates documentation with Sphinx and publishes to
+  `Github Pages <https://planetmarshall.github.io/cpp_sample_project/>`_
 
 
+Alternatives:
 
-Runtime Analysis
-----------------
+* `Jenkins <https://www.jenkins.io/>`_
+* `Travis <https://www.travis-ci.com/>`_
+* `Appveyor <https://www.appveyor.com/>`_
