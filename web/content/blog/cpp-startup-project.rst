@@ -4,6 +4,8 @@ A Modern Cross Platform C++ Project from Scratch
 :date: 2022-10-25
 :category: C++
 
+**TL;DR**: `Fork <https://github.com/planetmarshall/cpp_sample_project>`_ the project on Github.
+
 In the working life of a Software Engineer, it's actually pretty rare that you get to start
 a project from scratch - at least in my experience. It's more likely that you'll be working within the constraints of
 an existing project that could be decades old, in which case a lot of choices will have been made for you. Since there's
@@ -16,8 +18,6 @@ enough to have "carte blanche" to manage the project. Very few of these things c
 "standard", most are just personal choices, but I have tried to give some
 reasoning behind them. For every choice that I've made, there are probably several alternatives which are just as good.
 
-TL;DR: `Fork <https://github.com/planetmarshall/cpp_sample_project>`_ the project on Github.
-
 In summary, the components of the skeleton project are:
 
 * C++20 Standard
@@ -29,9 +29,7 @@ In summary, the components of the skeleton project are:
 * Dependency and package management with `Conan <https://docs.conan.io/en/latest/>`_
 * Continuous Integration with Github Workflows
 * Unit testing with Catch2
-* System testing with Python
 * Static analysis with clang-tidy
-* Runtime analysis with clang coverage
 * Documentation with Sphinx
 
 Many of the ideas have come from the following references:
@@ -66,8 +64,17 @@ compiled with the three major compilers:
 * Clang
 * MSVC
 
-In addition, raise the warning levels to their highest level. You may also wish to have all warnings flagged as errors
-in your code. Compiler level checks are one of the strengths of C++ and ignoring them can lead to subtle, and not so
+In addition, raise the warning levels to their highest level. I have the following warning levels set in the code:
+
+GCC and Clang::
+
+    -Wall -Wextra -Wpedantic -Wconversion -Wconditional-uninitialized
+
+MSVC::
+
+    /W4 /permissive-
+
+You may also wish to have all warnings flagged as errors in your code. Compiler level checks are one of the strengths of C++ and ignoring them can lead to subtle, and not so
 subtle, bugs in your code. See my `other post <uninitialized-variables-and-dodgy-casts.html>`_ for an example.
 
 
@@ -79,10 +86,10 @@ ba a bit obscure, but by its sheer ubiquity it is the defacto standard build sys
 it is a "meta" build system, this detail has become less important in recent years with CMake getting native support
 in IDEs like MSVC and CLion.
 
-Alternatives
+**Alternatives**
 
-* `Meson <https://mesonbuild.com/>`_ Widely used especially by GNU projects.
-* `Bazel <https://bazel.build/>`_ Used by Google projects such as Tensorflow.
+* `Meson <https://mesonbuild.com/>`_ is widely used especially by GNU projects.
+* `Bazel <https://bazel.build/>`_ is used by Google projects such as Tensorflow and Google Test
 
 Conan
 -----
@@ -114,15 +121,34 @@ to build with multiple configurations). However tools such as `clang-tidy <https
 can pick up other issues such as readability and security issues. It's also worth mentioning that some clang-tidy checks
 are project specific and others mutually exclusive, so check which ones are appropriate for your project.
 
-Note when running clang tidy on Ubuntu I ran into this bug - https://github.com/llvm/llvm-project/issues/46804
+Note when running clang tidy on Ubuntu I ran into this `bug <https://github.com/llvm/llvm-project/issues/46804>`_. See
+the project github workflow files for a workaround.
+
+Unit Tests
+----------
+
+Whilst the compiler can do some of the work for you, it can't verify your program for correct behaviour, so
+some automated testing is necessary. I have used `Catch2 <https://github.com/catchorg/Catch2>`_ but this is
+mostly just personal preference. If you have a free hand then pixk something that has good integration with your
+IDE of choice.
+
+**Alternatives**
+
+* `Google Test <https://github.com/google/googletest>`_
+* `Boost Test <https://www.boost.org/doc/libs/1_80_0/libs/test/doc/html/index.html>`_
 
 
 Documentation
 -------------
 
-I have yet to find a satisfactory solution for documentation of C++ source. Doxygen is widely used
-and the format is a defacto standard, but the source is dated and
-has fallen behind in support for some of the latest C++ features -
+I haven't yet settled on a tool for automatic C++ API documentation. `Doxygen <https://doxygen.nl/>`_ is widely
+used and is something of a defacto standard, but the style is somewhat dated and the default parsing engine is
+an adhoc design rather than using the Clang parser
+(although recent versions support using Clang, it isn't something I've tried).
+
+For general documentation I use `Sphinx <https://www.sphinx-doc.org/en/master/index.html>`_ and my ideal solution
+would be something like `clang-doc <https://clang.llvm.org/extra/clang-doc.html>`_ that would integrate with
+Sphinx in the same way Doxygen does using `Breathe <https://breathe.readthedocs.io/en/latest/>`_
 
 
 Continuous Integration
@@ -150,8 +176,19 @@ project performs the following tasks automatically:
   `Github Pages <https://planetmarshall.github.io/cpp_sample_project/>`_
 
 
-Alternatives:
+**Alternatives**
 
 * `Jenkins <https://www.jenkins.io/>`_
 * `Travis <https://www.travis-ci.com/>`_
 * `Appveyor <https://www.appveyor.com/>`_
+
+Future Work
+-----------
+
+This project is pretty much open ended so I had to stop somewhere or it would go on for ever. There are a few
+things I'd like to add which will hopefully be coming soon. These include but are not limited to:
+
+* Support for CUDA and other GPU execution libraries
+* Python bindings
+* Support for sanitizers such as Clang's thread and `address sanitizers <https://clang.llvm.org/docs/AddressSanitizer.html>`_
+* runtime analysis such as unit test coverage and memory consumption
