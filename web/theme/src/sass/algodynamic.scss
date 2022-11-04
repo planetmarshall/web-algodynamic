@@ -52,6 +52,11 @@ h1 {
     }
 }
 
+header a, h2 a {
+    color: $dark-les-2-hex;
+    font-weight: normal;
+}
+
 a {
     color: $dark-les-2-hex;
     font-weight: bolder;
